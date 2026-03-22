@@ -59,18 +59,29 @@
 
   .slide.ken-burns {
     background-size: cover;
-    animation: kenburns 25s ease-in-out infinite alternate;
   }
 
-  @keyframes kenburns {
+  .slide.kb-a { animation: kenburns-a 20s ease-in-out forwards; }
+  .slide.kb-b { animation: kenburns-b 20s ease-in-out forwards; }
+  .slide.kb-c { animation: kenburns-c 20s ease-in-out forwards; }
+
+  @keyframes kenburns-a {
     0%   { transform: scale(1.0) translate(0, 0); }
-    100% { transform: scale(1.08) translate(-1%, -0.5%); }
+    100% { transform: scale(1.1) translate(-1.5%, -1%); }
+  }
+  @keyframes kenburns-b {
+    0%   { transform: scale(1.05) translate(1%, 0); }
+    100% { transform: scale(1.0) translate(-0.5%, 1%); }
+  }
+  @keyframes kenburns-c {
+    0%   { transform: scale(1.0) translate(0.5%, 0.5%); }
+    100% { transform: scale(1.08) translate(0%, -1.5%); }
   }
 
   #slideshow-controls {
     position: fixed;
     bottom: 0; left: 0; right: 0;
-    padding: 40px 30px 30px;
+    padding: 40px 30px calc(30px + env(safe-area-inset-bottom, 0px));
     background: linear-gradient(transparent, rgba(0,0,0,0.85));
     display: flex;
     align-items: center;
@@ -109,6 +120,7 @@
   /* ── SETUP SCREEN ── */
   #setup {
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -174,7 +186,7 @@
     cursor: pointer;
     transition: border-color 0.3s, background 0.3s;
     background: transparent;
-    margin-bottom: 28px;
+    margin-bottom: 10px;
   }
 
   .upload-zone:active,
@@ -225,6 +237,43 @@
     opacity: 0.6;
   }
 
+  /* Upload buttons row */
+  .upload-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .upload-btn {
+    flex: 1;
+    padding: 12px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text-dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s;
+  }
+
+  .upload-btn:active {
+    background: var(--surface-hover);
+    border-color: var(--accent);
+    color: var(--text);
+  }
+
+  .upload-btn svg {
+    display: block;
+    margin: 0 auto 6px;
+    width: 20px; height: 20px;
+    stroke: var(--text-dim);
+    fill: none;
+    stroke-width: 1.5;
+  }
+
   /* Settings */
   .settings { margin-bottom: 32px; }
 
@@ -264,7 +313,7 @@
   }
 
   .stepper button {
-    width: 40px; height: 38px;
+    width: 44px; height: 42px;
     background: transparent;
     border: none;
     color: var(--accent);
@@ -280,7 +329,7 @@
   .stepper button:active { background: var(--surface-hover); }
 
   .stepper .stepper-val {
-    min-width: 50px;
+    min-width: 54px;
     text-align: center;
     font-size: 14px;
     font-weight: 400;
@@ -288,7 +337,7 @@
     border-left: 1px solid var(--border);
     border-right: 1px solid var(--border);
     padding: 0 4px;
-    line-height: 38px;
+    line-height: 42px;
   }
 
   /* Toggle */
@@ -301,7 +350,7 @@
   }
 
   .toggle-opt {
-    padding: 9px 16px;
+    padding: 10px 16px;
     font-size: 13px;
     font-weight: 400;
     color: var(--text-dim);
@@ -360,25 +409,48 @@
     font-family: 'DM Sans', sans-serif;
   }
 
-  /* Loading */
-  .loading-bar {
+  /* Progress bar */
+  .progress-wrap {
     position: fixed;
     top: 0; left: 0; right: 0;
-    height: 2px;
-    background: var(--accent);
-    transform-origin: left;
-    transform: scaleX(0);
-    transition: transform 0.3s;
+    height: 3px;
+    background: rgba(255,255,255,0.05);
     z-index: 100;
     display: none;
   }
 
-  .loading-bar.active { display: block; }
+  .progress-wrap.active { display: block; }
+
+  .progress-bar {
+    height: 100%;
+    background: var(--accent);
+    width: 0%;
+    transition: width 0.15s ease-out;
+  }
+
+  .progress-text {
+    position: fixed;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: var(--text-dim);
+    font-weight: 300;
+    z-index: 101;
+    display: none;
+    background: var(--surface);
+    padding: 4px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+  }
+
+  .progress-wrap.active + .progress-text { display: block; }
 </style>
 </head>
 <body>
 
-<div class="loading-bar" id="loadingBar"></div>
+<div class="progress-wrap" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
+<div class="progress-text" id="progressText"></div>
 
 <!-- SETUP SCREEN -->
 <div id="setup">
@@ -396,16 +468,28 @@
         <div class="upload-icon">
           <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
         </div>
-        <p>Tap to select photos</p>
+        <p>Tap below to add photos</p>
       </div>
       <div id="uploadLoaded" style="display:none">
         <div class="photo-count" id="photoCount">0</div>
         <div class="photo-label">photos loaded</div>
-        <div class="tap-hint">tap to add more</div>
+        <div class="tap-hint">add more below</div>
       </div>
     </div>
 
+    <div class="upload-row">
+      <button class="upload-btn" id="pickFilesBtn">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+        Select Photos
+      </button>
+      <button class="upload-btn" id="pickFolderBtn">
+        <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+        Select Folder
+      </button>
+    </div>
+
     <input type="file" id="fileInput" multiple accept="image/*" style="display:none">
+    <input type="file" id="folderInput" webkitdirectory multiple accept="image/*" style="display:none">
 
     <div class="settings">
       <div class="setting-row">
@@ -443,7 +527,7 @@
       <div class="setting-row">
         <div class="setting-label">
           Fit
-          <small>contain shows full photo</small>
+          <small>contain = full photo, fill = cropped</small>
         </div>
         <div class="toggle-wrap">
           <button class="toggle-opt active" data-fit="contain">Contain</button>
@@ -453,7 +537,7 @@
     </div>
 
     <button class="start-btn" id="startBtn" disabled>Start Slideshow</button>
-    <button class="clear-link" id="clearBtn" style="display:none">Clear all photos</button>
+    <button class="clear-link" id="clearBtn" style="display:none">Clear all photos &amp; start over</button>
   </div>
 </div>
 
@@ -470,25 +554,38 @@
 
 <script>
 (function() {
+  'use strict';
+
+  // ── Config ──
+  const MAX_DIMENSION = 1920;  // downscale longest edge to this
+  const JPEG_QUALITY = 0.82;   // quality for resized images
+  const DB_NAME = 'PhotoFrameDB';
+  const DB_VERSION = 2;
+  const STORE = 'photos';
+  const META_STORE = 'meta';
+  const BATCH_SIZE = 5;        // process N images at a time during import
+
   // ── State ──
-  let photos = [];        // array of blob URLs
-  let photoBlobs = [];    // raw blobs for DB storage
+  let photoCount = 0;          // total count in DB — we do NOT hold blobs in RAM
   let interval = 10;
   let transition = 'fade';
   let order = 'shuffle';
   let fit = 'contain';
   let currentIndex = 0;
   let shuffledOrder = [];
+  let photoIds = [];            // array of DB keys — lightweight
   let playing = false;
   let timer = null;
   let controlsTimer = null;
   let useSlideA = true;
+  let kbVariant = 0;
+
+  // active blob URLs — only ever 2 max (current + preloaded next)
+  let currentBlobUrl = null;
+  let preloadedBlobUrl = null;
+  let preloadedIndex = -1;
 
   // ── DB ──
-  const DB_NAME = 'PhotoFrameDB';
-  const DB_VERSION = 1;
-  const STORE = 'photos';
-
   function openDB() {
     return new Promise((resolve, reject) => {
       const req = indexedDB.open(DB_NAME, DB_VERSION);
@@ -497,43 +594,103 @@
         if (!db.objectStoreNames.contains(STORE)) {
           db.createObjectStore(STORE, { keyPath: 'id', autoIncrement: true });
         }
+        if (!db.objectStoreNames.contains(META_STORE)) {
+          db.createObjectStore(META_STORE, { keyPath: 'key' });
+        }
       };
       req.onsuccess = e => resolve(e.target.result);
       req.onerror = e => reject(e.target.error);
     });
   }
 
-  async function savePhotos(blobs) {
-    const db = await openDB();
-    const tx = db.transaction(STORE, 'readwrite');
-    const store = tx.objectStore(STORE);
-    for (const blob of blobs) {
-      store.add({ blob });
-    }
+  // save one resized blob, returns its id
+  async function savePhoto(db, blob) {
     return new Promise((resolve, reject) => {
-      tx.oncomplete = resolve;
-      tx.onerror = () => reject(tx.error);
-    });
-  }
-
-  async function loadPhotos() {
-    const db = await openDB();
-    const tx = db.transaction(STORE, 'readonly');
-    const store = tx.objectStore(STORE);
-    const req = store.getAll();
-    return new Promise((resolve, reject) => {
-      req.onsuccess = () => resolve(req.result.map(r => r.blob));
+      const tx = db.transaction(STORE, 'readwrite');
+      const req = tx.objectStore(STORE).add({ blob });
+      req.onsuccess = () => resolve(req.result);
       req.onerror = () => reject(req.error);
     });
   }
 
-  async function clearPhotos() {
-    const db = await openDB();
-    const tx = db.transaction(STORE, 'readwrite');
-    tx.objectStore(STORE).clear();
+  // get all keys (not values — cheap)
+  async function getAllKeys(db) {
     return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE, 'readonly');
+      const req = tx.objectStore(STORE).getAllKeys();
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  // get one photo blob by id
+  async function getPhoto(db, id) {
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE, 'readonly');
+      const req = tx.objectStore(STORE).get(id);
+      req.onsuccess = () => resolve(req.result ? req.result.blob : null);
+      req.onerror = () => reject(req.error);
+    });
+  }
+
+  async function clearAllPhotos(db) {
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(STORE, 'readwrite');
+      tx.objectStore(STORE).clear();
       tx.oncomplete = resolve;
       tx.onerror = () => reject(tx.error);
+    });
+  }
+
+  // ── Image Resizer ──
+  // downscale to MAX_DIMENSION, output as JPEG blob
+  function resizeImage(file) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+
+        let { width, height } = img;
+        const longest = Math.max(width, height);
+
+        // skip resize if already small enough
+        if (longest <= MAX_DIMENSION) {
+          // still convert to JPEG for consistency & smaller size
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+          canvas.toBlob(blob => {
+            if (blob) resolve(blob);
+            else reject(new Error('Canvas toBlob failed'));
+          }, 'image/jpeg', JPEG_QUALITY);
+          return;
+        }
+
+        const scale = MAX_DIMENSION / longest;
+        const newW = Math.round(width * scale);
+        const newH = Math.round(height * scale);
+
+        const canvas = document.createElement('canvas');
+        canvas.width = newW;
+        canvas.height = newH;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, newW, newH);
+        canvas.toBlob(blob => {
+          if (blob) resolve(blob);
+          else reject(new Error('Canvas toBlob failed'));
+        }, 'image/jpeg', JPEG_QUALITY);
+      };
+
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error('Image load failed'));
+      };
+
+      img.src = url;
     });
   }
 
@@ -545,6 +702,7 @@
     uploadEmpty: document.getElementById('uploadEmpty'),
     uploadLoaded: document.getElementById('uploadLoaded'),
     fileInput: document.getElementById('fileInput'),
+    folderInput: document.getElementById('folderInput'),
     photoCount: document.getElementById('photoCount'),
     intervalVal: document.getElementById('intervalVal'),
     startBtn: document.getElementById('startBtn'),
@@ -554,71 +712,123 @@
     counter: document.getElementById('photo-counter'),
     slideA: document.getElementById('slideA'),
     slideB: document.getElementById('slideB'),
-    loadingBar: document.getElementById('loadingBar'),
+    progressWrap: document.getElementById('progressWrap'),
+    progressBar: document.getElementById('progressBar'),
+    progressText: document.getElementById('progressText'),
   };
 
-  // ── Upload ──
+  // ── UI Update ──
   function updateUI() {
-    const has = photos.length > 0;
+    const has = photoCount > 0;
     el.uploadEmpty.style.display = has ? 'none' : 'block';
     el.uploadLoaded.style.display = has ? 'block' : 'none';
-    el.photoCount.textContent = photos.length;
+    el.photoCount.textContent = photoCount;
     el.startBtn.disabled = !has;
     el.clearBtn.style.display = has ? 'block' : 'none';
     if (has) el.uploadZone.classList.add('has-photos');
     else el.uploadZone.classList.remove('has-photos');
   }
 
+  // ── Import Pipeline ──
+  // process files in batches: resize → store in DB → update progress
   async function handleFiles(fileList) {
     const files = Array.from(fileList).filter(f => f.type.startsWith('image/'));
     if (!files.length) return;
 
-    el.loadingBar.classList.add('active');
-    const newBlobs = [];
+    const total = files.length;
+    let processed = 0;
+    let failed = 0;
 
-    for (let i = 0; i < files.length; i++) {
-      el.loadingBar.style.transform = `scaleX(${(i + 1) / files.length})`;
-      const blob = files[i];
-      newBlobs.push(blob);
-      const url = URL.createObjectURL(blob);
-      photos.push(url);
-      photoBlobs.push(blob);
+    el.progressWrap.classList.add('active');
+    el.progressBar.style.width = '0%';
+    el.progressText.textContent = `Processing 0 / ${total}`;
+
+    const db = await openDB();
+
+    // process in batches to avoid overwhelming the browser
+    for (let i = 0; i < total; i += BATCH_SIZE) {
+      const batch = files.slice(i, i + BATCH_SIZE);
+      const promises = batch.map(async (file) => {
+        try {
+          const resized = await resizeImage(file);
+          await savePhoto(db, resized);
+        } catch (e) {
+          console.warn('Skipped file:', file.name, e);
+          failed++;
+        }
+        processed++;
+        const pct = Math.round((processed / total) * 100);
+        el.progressBar.style.width = pct + '%';
+        el.progressText.textContent = `Processing ${processed} / ${total}`;
+      });
+      await Promise.all(promises);
+
+      // let the UI breathe between batches
+      await new Promise(r => setTimeout(r, 10));
     }
 
-    try { await savePhotos(newBlobs); } catch(e) { console.warn('DB save failed', e); }
+    // refresh key list and count
+    photoIds = await getAllKeys(db);
+    photoCount = photoIds.length;
 
     setTimeout(() => {
-      el.loadingBar.classList.remove('active');
-      el.loadingBar.style.transform = 'scaleX(0)';
-    }, 400);
+      el.progressWrap.classList.remove('active');
+      el.progressBar.style.width = '0%';
+      el.progressText.textContent = '';
+    }, 500);
 
     updateUI();
+
+    if (failed > 0) {
+      console.warn(`Import done. ${failed} file(s) could not be processed.`);
+    }
   }
 
+  // ── Upload Events ──
+  document.getElementById('pickFilesBtn').addEventListener('click', () => el.fileInput.click());
+  document.getElementById('pickFolderBtn').addEventListener('click', () => el.folderInput.click());
   el.uploadZone.addEventListener('click', () => el.fileInput.click());
-  el.fileInput.addEventListener('change', e => handleFiles(e.target.files));
+
+  el.fileInput.addEventListener('change', e => {
+    if (e.target.files.length) handleFiles(e.target.files);
+    e.target.value = ''; // reset so same selection works again
+  });
+
+  el.folderInput.addEventListener('change', e => {
+    if (e.target.files.length) handleFiles(e.target.files);
+    e.target.value = '';
+  });
 
   el.clearBtn.addEventListener('click', async (e) => {
     e.stopPropagation();
-    if (confirm('Remove all photos?')) {
-      photos.forEach(u => URL.revokeObjectURL(u));
-      photos = [];
-      photoBlobs = [];
-      try { await clearPhotos(); } catch(e) {}
+    if (confirm('Remove all photos? This cannot be undone.')) {
+      try {
+        const db = await openDB();
+        await clearAllPhotos(db);
+      } catch(e) { console.warn('Clear failed', e); }
+      photoIds = [];
+      photoCount = 0;
       updateUI();
     }
   });
 
   // ── Settings Controls ──
   document.getElementById('intervalDown').addEventListener('click', () => {
-    interval = Math.max(3, interval - (interval <= 10 ? 1 : 5));
-    el.intervalVal.textContent = interval;
+    if (interval <= 5) interval = Math.max(3, interval - 1);
+    else if (interval <= 15) interval -= 5;
+    else interval = Math.max(15, interval - 15);
+    el.intervalVal.textContent = interval + 's';
   });
 
   document.getElementById('intervalUp').addEventListener('click', () => {
-    interval = Math.min(120, interval + (interval < 10 ? 1 : 5));
-    el.intervalVal.textContent = interval;
+    if (interval < 5) interval++;
+    else if (interval < 15) interval += 5;
+    else interval = Math.min(120, interval + 15);
+    el.intervalVal.textContent = interval + 's';
   });
+
+  // init display
+  el.intervalVal.textContent = interval + 's';
 
   document.querySelectorAll('[data-transition]').forEach(btn => {
     btn.addEventListener('click', () => {
@@ -644,9 +854,12 @@
     });
   });
 
-  // ── Slideshow ──
+  // ── Slideshow Engine ──
+  // only loads current photo from DB on demand, preloads next
+  let db = null; // keep connection open during slideshow
+
   function buildOrder() {
-    shuffledOrder = Array.from({ length: photos.length }, (_, i) => i);
+    shuffledOrder = Array.from({ length: photoIds.length }, (_, i) => i);
     if (order === 'shuffle') {
       for (let i = shuffledOrder.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -655,60 +868,125 @@
     }
   }
 
-  function showPhoto() {
-    const idx = shuffledOrder[currentIndex];
-    const url = photos[idx];
-    const bgSize = fit === 'cover' ? 'cover' : 'contain';
+  function revokeUrl(url) {
+    if (url) {
+      try { URL.revokeObjectURL(url); } catch(e) {}
+    }
+  }
+
+  async function loadPhotoUrl(index) {
+    const dbKey = photoIds[shuffledOrder[index]];
+    const blob = await getPhoto(db, dbKey);
+    if (!blob) return null;
+    return URL.createObjectURL(blob);
+  }
+
+  async function showPhoto() {
+    let url;
+
+    // use preloaded if available for this index
+    if (preloadedIndex === currentIndex && preloadedBlobUrl) {
+      url = preloadedBlobUrl;
+      preloadedBlobUrl = null;
+      preloadedIndex = -1;
+    } else {
+      url = await loadPhotoUrl(currentIndex);
+    }
+
+    if (!url) return;
+
+    // revoke old current
     const incoming = useSlideA ? el.slideA : el.slideB;
     const outgoing = useSlideA ? el.slideB : el.slideA;
 
     incoming.style.backgroundImage = `url('${url}')`;
-    incoming.style.backgroundSize = bgSize;
+    incoming.style.backgroundSize = (transition === 'kenburns' || fit === 'cover') ? 'cover' : 'contain';
 
+    // ken burns: randomize direction
+    incoming.classList.remove('ken-burns', 'kb-a', 'kb-b', 'kb-c');
     if (transition === 'kenburns') {
       incoming.classList.add('ken-burns');
-      incoming.style.backgroundSize = 'cover';
-    } else {
-      incoming.classList.remove('ken-burns');
+      const variants = ['kb-a', 'kb-b', 'kb-c'];
+      incoming.classList.add(variants[kbVariant % 3]);
+      kbVariant++;
     }
 
     incoming.classList.add('visible');
     outgoing.classList.remove('visible');
 
+    // after transition completes, revoke the outgoing URL
+    const oldUrl = currentBlobUrl;
+    setTimeout(() => revokeUrl(oldUrl), 2500);
+
+    currentBlobUrl = url;
     useSlideA = !useSlideA;
-    el.counter.textContent = `${currentIndex + 1} / ${photos.length}`;
+    el.counter.textContent = `${currentIndex + 1} / ${photoIds.length}`;
+
+    // preload next
+    preloadNext();
   }
 
-  function advance() {
-    currentIndex = (currentIndex + 1) % photos.length;
+  async function preloadNext() {
+    const nextIndex = (currentIndex + 1) % photoIds.length;
+    // don't preload if already preloaded
+    if (preloadedIndex === nextIndex && preloadedBlobUrl) return;
+
+    revokeUrl(preloadedBlobUrl);
+    preloadedBlobUrl = null;
+
+    try {
+      preloadedBlobUrl = await loadPhotoUrl(nextIndex);
+      preloadedIndex = nextIndex;
+    } catch(e) {
+      // non-critical
+    }
+  }
+
+  async function advance() {
+    currentIndex = (currentIndex + 1) % photoIds.length;
     if (currentIndex === 0 && order === 'shuffle') buildOrder();
-    showPhoto();
+    await showPhoto();
   }
 
-  function startSlideshow() {
+  async function startSlideshow() {
+    db = await openDB();
+    photoIds = await getAllKeys(db);
+    if (!photoIds.length) return;
+
     buildOrder();
     currentIndex = 0;
+    kbVariant = 0;
 
-    el.slideA.classList.remove('visible', 'ken-burns');
-    el.slideB.classList.remove('visible', 'ken-burns');
+    el.slideA.classList.remove('visible', 'ken-burns', 'kb-a', 'kb-b', 'kb-c');
+    el.slideB.classList.remove('visible', 'ken-burns', 'kb-a', 'kb-b', 'kb-c');
+    el.slideA.style.backgroundImage = '';
+    el.slideB.style.backgroundImage = '';
 
     el.setup.style.display = 'none';
     el.slideshow.classList.add('active');
     playing = true;
 
-    // Set CSS transition speed
     document.documentElement.style.setProperty('--transition-speed', Math.min(interval * 0.3, 2) + 's');
 
-    showPhoto();
-    timer = setInterval(advance, interval * 1000);
-
-    // Show controls briefly
+    await showPhoto();
+    timer = setInterval(() => advance(), interval * 1000);
     flashControls();
   }
 
   function stopSlideshow() {
     playing = false;
     clearInterval(timer);
+    timer = null;
+
+    // clean up blob URLs
+    revokeUrl(currentBlobUrl);
+    revokeUrl(preloadedBlobUrl);
+    currentBlobUrl = null;
+    preloadedBlobUrl = null;
+    preloadedIndex = -1;
+
+    el.slideA.style.backgroundImage = '';
+    el.slideB.style.backgroundImage = '';
     el.slideshow.classList.remove('active', 'show-controls');
     el.setup.style.display = 'flex';
   }
@@ -718,7 +996,7 @@
     clearTimeout(controlsTimer);
     controlsTimer = setTimeout(() => {
       el.slideshow.classList.remove('show-controls');
-    }, 3000);
+    }, 3500);
   }
 
   el.startBtn.addEventListener('click', startSlideshow);
@@ -727,11 +1005,12 @@
   el.pauseBtn.addEventListener('click', () => {
     if (playing) {
       clearInterval(timer);
+      timer = null;
       playing = false;
       el.pauseBtn.textContent = '▶ Play';
     } else {
       playing = true;
-      timer = setInterval(advance, interval * 1000);
+      timer = setInterval(() => advance(), interval * 1000);
       el.pauseBtn.textContent = '❚❚ Pause';
     }
     flashControls();
@@ -742,22 +1021,18 @@
     flashControls();
   });
 
-  // ── Init: load saved photos ──
+  // ── Init: count saved photos ──
   (async () => {
     try {
-      const saved = await loadPhotos();
-      if (saved.length) {
-        for (const blob of saved) {
-          const url = URL.createObjectURL(blob);
-          photos.push(url);
-          photoBlobs.push(blob);
-        }
-        updateUI();
-      }
+      const d = await openDB();
+      photoIds = await getAllKeys(d);
+      photoCount = photoIds.length;
+      updateUI();
     } catch(e) {
-      console.warn('Could not load saved photos', e);
+      console.warn('DB init failed', e);
     }
   })();
+
 })();
 </script>
 </body>
