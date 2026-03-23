@@ -21,12 +21,13 @@
     --text-dim: #7a756e;
     --accent: #c9a87c;
     --accent-dim: rgba(201, 168, 124, 0.15);
+    --danger: #c25f5f;
+    --danger-dim: rgba(194, 95, 95, 0.15);
     --transition-speed: 1.5s;
   }
 
   html, body {
     width: 100%; height: 100%;
-    overflow: hidden;
     background: var(--bg);
     color: var(--text);
     font-family: 'DM Sans', sans-serif;
@@ -35,12 +36,15 @@
     -webkit-tap-highlight-color: transparent;
   }
 
+  body { overflow: hidden; }
+
   /* ── SLIDESHOW ── */
   #slideshow {
     position: fixed; inset: 0;
     background: var(--bg);
     display: none;
     cursor: none;
+    z-index: 50;
   }
 
   #slideshow.active { display: block; }
@@ -56,10 +60,7 @@
   }
 
   .slide.visible { opacity: 1; }
-
-  .slide.ken-burns {
-    background-size: cover;
-  }
+  .slide.ken-burns { background-size: cover; }
 
   .slide.kb-a { animation: kenburns-a 20s ease-in-out forwards; }
   .slide.kb-b { animation: kenburns-b 20s ease-in-out forwards; }
@@ -119,14 +120,12 @@
 
   /* ── SETUP SCREEN ── */
   #setup {
-    min-height: 100vh;
-    min-height: 100dvh;
+    height: 100vh;
+    height: 100dvh;
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 30px;
+    flex-direction: column;
     position: relative;
-    overflow-y: auto;
+    overflow: hidden;
   }
 
   #setup::before {
@@ -138,118 +137,75 @@
     pointer-events: none;
   }
 
-  .setup-card {
-    width: 100%;
-    max-width: 460px;
+  .setup-header {
+    flex-shrink: 0;
+    padding: 24px 24px 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  .setup-scroll {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 24px 30px;
     position: relative;
     z-index: 1;
   }
 
+  .setup-inner {
+    max-width: 520px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
   .logo {
     text-align: center;
-    margin-bottom: 48px;
+    margin-bottom: 28px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .logo-icon {
-    width: 48px; height: 48px;
-    margin: 0 auto 18px;
+    width: 44px; height: 44px;
+    margin: 0 auto 14px;
     border: 1.5px solid var(--border);
-    border-radius: 12px;
+    border-radius: 11px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: var(--surface);
   }
 
-  .logo-icon svg { width: 22px; height: 22px; stroke: var(--accent); fill: none; stroke-width: 1.5; }
+  .logo-icon svg { width: 20px; height: 20px; stroke: var(--accent); fill: none; stroke-width: 1.5; }
 
   .logo h1 {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 400;
     letter-spacing: -0.3px;
     color: var(--text);
   }
 
   .logo p {
-    font-size: 13px;
-    color: var(--text-dim);
-    margin-top: 6px;
-    font-weight: 300;
-  }
-
-  /* Upload zone */
-  .upload-zone {
-    border: 1.5px dashed var(--border);
-    border-radius: 16px;
-    padding: 44px 24px;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color 0.3s, background 0.3s;
-    background: transparent;
-    margin-bottom: 10px;
-  }
-
-  .upload-zone:active,
-  .upload-zone.dragover {
-    border-color: var(--accent);
-    background: var(--accent-dim);
-  }
-
-  .upload-zone.has-photos {
-    border-style: solid;
-    border-color: var(--accent);
-    background: var(--accent-dim);
-    padding: 28px 24px;
-  }
-
-  .upload-icon {
-    width: 40px; height: 40px;
-    margin: 0 auto 14px;
-    opacity: 0.4;
-  }
-
-  .upload-icon svg { width: 100%; height: 100%; stroke: var(--text); fill: none; stroke-width: 1.2; }
-
-  .upload-zone p {
-    font-size: 14px;
-    color: var(--text-dim);
-    font-weight: 300;
-  }
-
-  .upload-zone .photo-count {
-    font-size: 28px;
-    font-weight: 300;
-    color: var(--accent);
-    letter-spacing: -0.5px;
-  }
-
-  .upload-zone .photo-label {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-dim);
     margin-top: 4px;
     font-weight: 300;
   }
 
-  .upload-zone .tap-hint {
-    font-size: 12px;
-    color: var(--text-dim);
-    margin-top: 14px;
-    opacity: 0.6;
-  }
-
-  /* Upload buttons row */
   .upload-row {
     display: flex;
     gap: 10px;
-    margin-bottom: 28px;
+    margin-bottom: 20px;
   }
 
   .upload-btn {
     flex: 1;
-    padding: 12px 16px;
+    padding: 14px 16px;
     background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
+    border: 1.5px dashed var(--border);
+    border-radius: 14px;
     color: var(--text-dim);
     font-family: 'DM Sans', sans-serif;
     font-size: 13px;
@@ -260,28 +216,158 @@
   }
 
   .upload-btn:active {
-    background: var(--surface-hover);
+    background: var(--accent-dim);
     border-color: var(--accent);
-    color: var(--text);
+    color: var(--accent);
   }
 
   .upload-btn svg {
     display: block;
     margin: 0 auto 6px;
     width: 20px; height: 20px;
-    stroke: var(--text-dim);
+    stroke: currentColor;
     fill: none;
     stroke-width: 1.5;
   }
 
+  /* ── THUMBNAIL GRID ── */
+  .thumb-section {
+    margin-bottom: 20px;
+    display: none;
+  }
+
+  .thumb-section.has-photos { display: block; }
+
+  .thumb-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .thumb-count {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-weight: 300;
+  }
+
+  .thumb-count strong {
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  .thumb-actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .thumb-act-btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-dim);
+  }
+
+  .thumb-act-btn:active { background: var(--surface-hover); }
+
+  .thumb-act-btn.danger {
+    background: var(--danger-dim);
+    border-color: rgba(194, 95, 95, 0.3);
+    color: var(--danger);
+  }
+
+  .thumb-act-btn.danger:active { background: rgba(194, 95, 95, 0.3); }
+
+  .thumb-act-btn.hidden { display: none; }
+
+  .thumb-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 6px;
+    max-height: 280px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+    padding: 2px;
+  }
+
+  .thumb-item {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    overflow: hidden;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    transition: border-color 0.15s, opacity 0.2s;
+    cursor: pointer;
+  }
+
+  .thumb-item.selected {
+    border-color: var(--accent);
+  }
+
+  .thumb-check {
+    position: absolute;
+    top: 4px; left: 4px;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(255,255,255,0.5);
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: all 0.15s;
+    pointer-events: none;
+  }
+
+  .thumb-check svg {
+    width: 12px; height: 12px;
+    stroke: #fff;
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .thumb-item.selected .thumb-check {
+    background: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .thumb-item.selected .thumb-check svg { opacity: 1; }
+
+  .thumb-item img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .thumb-item img.loaded { opacity: 1; }
+
+  .thumb-remove { display: none; /* replaced by selection workflow */ }
+
   /* Settings */
-  .settings { margin-bottom: 32px; }
+  .settings { margin-bottom: 24px; }
 
   .setting-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 16px 0;
+    padding: 14px 0;
     border-bottom: 1px solid var(--border);
   }
 
@@ -295,17 +381,15 @@
 
   .setting-label small {
     display: block;
-    font-size: 12px;
+    font-size: 11px;
     color: var(--text-dim);
     font-weight: 300;
-    margin-top: 3px;
+    margin-top: 2px;
   }
 
-  /* Stepper */
   .stepper {
     display: flex;
     align-items: center;
-    gap: 0;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -323,7 +407,6 @@
     align-items: center;
     justify-content: center;
     font-weight: 300;
-    transition: background 0.15s;
   }
 
   .stepper button:active { background: var(--surface-hover); }
@@ -336,13 +419,11 @@
     color: var(--text);
     border-left: 1px solid var(--border);
     border-right: 1px solid var(--border);
-    padding: 0 4px;
     line-height: 42px;
   }
 
-  /* Toggle */
   .toggle-wrap {
-    display: flex; gap: 0;
+    display: flex;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -368,7 +449,6 @@
 
   .toggle-opt + .toggle-opt { border-left: 1px solid var(--border); }
 
-  /* Start button */
   .start-btn {
     width: 100%;
     padding: 16px;
@@ -396,20 +476,6 @@
     filter: brightness(0.9);
   }
 
-  .clear-link {
-    display: block;
-    text-align: center;
-    margin-top: 16px;
-    font-size: 12px;
-    color: var(--text-dim);
-    cursor: pointer;
-    opacity: 0.6;
-    background: none;
-    border: none;
-    font-family: 'DM Sans', sans-serif;
-  }
-
-  /* Progress bar */
   .progress-wrap {
     position: fixed;
     top: 0; left: 0; right: 0;
@@ -442,9 +508,10 @@
     padding: 4px 14px;
     border-radius: 20px;
     border: 1px solid var(--border);
+    white-space: nowrap;
   }
 
-  .progress-wrap.active + .progress-text { display: block; }
+  .progress-wrap.active ~ .progress-text { display: block; }
 </style>
 </head>
 <body>
@@ -452,9 +519,8 @@
 <div class="progress-wrap" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
 <div class="progress-text" id="progressText"></div>
 
-<!-- SETUP SCREEN -->
 <div id="setup">
-  <div class="setup-card">
+  <div class="setup-header">
     <div class="logo">
       <div class="logo-icon">
         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
@@ -462,86 +528,84 @@
       <h1>Photo Frame</h1>
       <p>No accounts. No subscriptions. Just your photos.</p>
     </div>
+  </div>
 
-    <div class="upload-zone" id="uploadZone">
-      <div id="uploadEmpty">
-        <div class="upload-icon">
-          <svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+  <div class="setup-scroll">
+    <div class="setup-inner">
+
+      <div class="upload-row">
+        <button class="upload-btn" id="pickFilesBtn">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          Select Photos
+        </button>
+        <button class="upload-btn" id="pickFolderBtn">
+          <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
+          Select Folder
+        </button>
+      </div>
+
+      <input type="file" id="fileInput" multiple accept="image/*" style="display:none">
+      <input type="file" id="folderInput" webkitdirectory multiple accept="image/*" style="display:none">
+
+      <div class="thumb-section" id="thumbSection">
+        <div class="thumb-header">
+          <span class="thumb-count"><strong id="thumbCount">0</strong> photos</span>
+          <div class="thumb-actions">
+            <button class="thumb-act-btn" id="selectAllBtn">Select All</button>
+            <button class="thumb-act-btn hidden" id="deselectAllBtn">Deselect</button>
+            <button class="thumb-act-btn danger hidden" id="removeSelectedBtn">Remove Selected</button>
+            <button class="thumb-act-btn danger" id="clearAllBtn">Clear All</button>
+          </div>
         </div>
-        <p>Tap below to add photos</p>
+        <div class="thumb-grid" id="thumbGrid"></div>
       </div>
-      <div id="uploadLoaded" style="display:none">
-        <div class="photo-count" id="photoCount">0</div>
-        <div class="photo-label">photos loaded</div>
-        <div class="tap-hint">add more below</div>
+
+      <div class="settings">
+        <div class="setting-row">
+          <div class="setting-label">
+            Interval
+            <small>seconds per photo</small>
+          </div>
+          <div class="stepper">
+            <button id="intervalDown">−</button>
+            <div class="stepper-val" id="intervalVal">10s</div>
+            <button id="intervalUp">+</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">Transition</div>
+          <div class="toggle-wrap">
+            <button class="toggle-opt active" data-transition="fade">Fade</button>
+            <button class="toggle-opt" data-transition="kenburns">Ken Burns</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">Order</div>
+          <div class="toggle-wrap">
+            <button class="toggle-opt active" data-order="shuffle">Shuffle</button>
+            <button class="toggle-opt" data-order="sequential">In Order</button>
+          </div>
+        </div>
+
+        <div class="setting-row">
+          <div class="setting-label">
+            Fit
+            <small>contain = full photo</small>
+          </div>
+          <div class="toggle-wrap">
+            <button class="toggle-opt active" data-fit="contain">Contain</button>
+            <button class="toggle-opt" data-fit="cover">Fill</button>
+          </div>
+        </div>
       </div>
+
+      <button class="start-btn" id="startBtn" disabled>Start Slideshow</button>
     </div>
-
-    <div class="upload-row">
-      <button class="upload-btn" id="pickFilesBtn">
-        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-        Select Photos
-      </button>
-      <button class="upload-btn" id="pickFolderBtn">
-        <svg viewBox="0 0 24 24"><path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z"/></svg>
-        Select Folder
-      </button>
-    </div>
-
-    <input type="file" id="fileInput" multiple accept="image/*" style="display:none">
-    <input type="file" id="folderInput" webkitdirectory multiple accept="image/*" style="display:none">
-
-    <div class="settings">
-      <div class="setting-row">
-        <div class="setting-label">
-          Interval
-          <small>seconds per photo</small>
-        </div>
-        <div class="stepper">
-          <button id="intervalDown">−</button>
-          <div class="stepper-val" id="intervalVal">10</div>
-          <button id="intervalUp">+</button>
-        </div>
-      </div>
-
-      <div class="setting-row">
-        <div class="setting-label">
-          Transition
-        </div>
-        <div class="toggle-wrap">
-          <button class="toggle-opt active" data-transition="fade">Fade</button>
-          <button class="toggle-opt" data-transition="kenburns">Ken Burns</button>
-        </div>
-      </div>
-
-      <div class="setting-row">
-        <div class="setting-label">
-          Order
-        </div>
-        <div class="toggle-wrap">
-          <button class="toggle-opt active" data-order="shuffle">Shuffle</button>
-          <button class="toggle-opt" data-order="sequential">In Order</button>
-        </div>
-      </div>
-
-      <div class="setting-row">
-        <div class="setting-label">
-          Fit
-          <small>contain = full photo, fill = cropped</small>
-        </div>
-        <div class="toggle-wrap">
-          <button class="toggle-opt active" data-fit="contain">Contain</button>
-          <button class="toggle-opt" data-fit="cover">Fill</button>
-        </div>
-      </div>
-    </div>
-
-    <button class="start-btn" id="startBtn" disabled>Start Slideshow</button>
-    <button class="clear-link" id="clearBtn" style="display:none">Clear all photos &amp; start over</button>
   </div>
 </div>
 
-<!-- SLIDESHOW -->
 <div id="slideshow">
   <div class="slide" id="slideA"></div>
   <div class="slide" id="slideB"></div>
@@ -556,157 +620,143 @@
 (function() {
   'use strict';
 
-  // ── Config ──
-  const MAX_DIMENSION = 1920;  // downscale longest edge to this
-  const JPEG_QUALITY = 0.82;   // quality for resized images
+  const MAX_DIM = 1920;
+  const THUMB_DIM = 150;
+  const JPEG_Q = 0.82;
+  const THUMB_Q = 0.6;
   const DB_NAME = 'PhotoFrameDB';
-  const DB_VERSION = 2;
-  const STORE = 'photos';
-  const META_STORE = 'meta';
-  const BATCH_SIZE = 5;        // process N images at a time during import
+  const DB_VER = 3;
+  const P_STORE = 'photos';
+  const T_STORE = 'thumbnails';
+  const BATCH = 5;
 
-  // ── State ──
-  let photoCount = 0;          // total count in DB — we do NOT hold blobs in RAM
+  let photoIds = [];
   let interval = 10;
   let transition = 'fade';
   let order = 'shuffle';
   let fit = 'contain';
   let currentIndex = 0;
   let shuffledOrder = [];
-  let photoIds = [];            // array of DB keys — lightweight
   let playing = false;
   let timer = null;
   let controlsTimer = null;
   let useSlideA = true;
   let kbVariant = 0;
-
-  // active blob URLs — only ever 2 max (current + preloaded next)
   let currentBlobUrl = null;
   let preloadedBlobUrl = null;
   let preloadedIndex = -1;
+  let thumbBlobUrls = [];
+  let selectedIds = new Set();
 
   // ── DB ──
   function openDB() {
-    return new Promise((resolve, reject) => {
-      const req = indexedDB.open(DB_NAME, DB_VERSION);
-      req.onupgradeneeded = e => {
+    return new Promise((res, rej) => {
+      const r = indexedDB.open(DB_NAME, DB_VER);
+      r.onupgradeneeded = e => {
         const db = e.target.result;
-        if (!db.objectStoreNames.contains(STORE)) {
-          db.createObjectStore(STORE, { keyPath: 'id', autoIncrement: true });
-        }
-        if (!db.objectStoreNames.contains(META_STORE)) {
-          db.createObjectStore(META_STORE, { keyPath: 'key' });
-        }
+        if (!db.objectStoreNames.contains(P_STORE))
+          db.createObjectStore(P_STORE, { keyPath: 'id', autoIncrement: true });
+        if (!db.objectStoreNames.contains(T_STORE))
+          db.createObjectStore(T_STORE, { keyPath: 'id' });
       };
-      req.onsuccess = e => resolve(e.target.result);
-      req.onerror = e => reject(e.target.error);
+      r.onsuccess = e => res(e.target.result);
+      r.onerror = e => rej(e.target.error);
     });
   }
 
-  // save one resized blob, returns its id
-  async function savePhoto(db, blob) {
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE, 'readwrite');
-      const req = tx.objectStore(STORE).add({ blob });
-      req.onsuccess = () => resolve(req.result);
-      req.onerror = () => reject(req.error);
+  function dbSavePhotoAndThumb(db, pBlob, tBlob) {
+    return new Promise((res, rej) => {
+      const tx = db.transaction([P_STORE, T_STORE], 'readwrite');
+      const pr = tx.objectStore(P_STORE).add({ blob: pBlob });
+      pr.onsuccess = () => tx.objectStore(T_STORE).put({ id: pr.result, blob: tBlob });
+      tx.oncomplete = () => res(pr.result);
+      tx.onerror = () => rej(tx.error);
     });
   }
 
-  // get all keys (not values — cheap)
-  async function getAllKeys(db) {
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE, 'readonly');
-      const req = tx.objectStore(STORE).getAllKeys();
-      req.onsuccess = () => resolve(req.result);
-      req.onerror = () => reject(req.error);
+  function dbGetAllKeys(db) {
+    return new Promise((res, rej) => {
+      const r = db.transaction(P_STORE, 'readonly').objectStore(P_STORE).getAllKeys();
+      r.onsuccess = () => res(r.result);
+      r.onerror = () => rej(r.error);
     });
   }
 
-  // get one photo blob by id
-  async function getPhoto(db, id) {
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE, 'readonly');
-      const req = tx.objectStore(STORE).get(id);
-      req.onsuccess = () => resolve(req.result ? req.result.blob : null);
-      req.onerror = () => reject(req.error);
+  function dbGetPhoto(db, id) {
+    return new Promise((res, rej) => {
+      const r = db.transaction(P_STORE, 'readonly').objectStore(P_STORE).get(id);
+      r.onsuccess = () => res(r.result ? r.result.blob : null);
+      r.onerror = () => rej(r.error);
     });
   }
 
-  async function clearAllPhotos(db) {
-    return new Promise((resolve, reject) => {
-      const tx = db.transaction(STORE, 'readwrite');
-      tx.objectStore(STORE).clear();
-      tx.oncomplete = resolve;
-      tx.onerror = () => reject(tx.error);
+  function dbGetThumb(db, id) {
+    return new Promise((res, rej) => {
+      const r = db.transaction(T_STORE, 'readonly').objectStore(T_STORE).get(id);
+      r.onsuccess = () => res(r.result ? r.result.blob : null);
+      r.onerror = () => rej(r.error);
     });
   }
 
-  // ── Image Resizer ──
-  // downscale to MAX_DIMENSION, output as JPEG blob
-  function resizeImage(file) {
-    return new Promise((resolve, reject) => {
+  function dbDeletePhoto(db, id) {
+    return new Promise((res, rej) => {
+      const tx = db.transaction([P_STORE, T_STORE], 'readwrite');
+      tx.objectStore(P_STORE).delete(id);
+      tx.objectStore(T_STORE).delete(id);
+      tx.oncomplete = res;
+      tx.onerror = () => rej(tx.error);
+    });
+  }
+
+  function dbClearAll(db) {
+    return new Promise((res, rej) => {
+      const tx = db.transaction([P_STORE, T_STORE], 'readwrite');
+      tx.objectStore(P_STORE).clear();
+      tx.objectStore(T_STORE).clear();
+      tx.oncomplete = res;
+      tx.onerror = () => rej(tx.error);
+    });
+  }
+
+  // ── Image Processing ──
+  function resizeToBlob(file, maxDim, quality) {
+    return new Promise((res, rej) => {
       const img = new Image();
       const url = URL.createObjectURL(file);
-
       img.onload = () => {
         URL.revokeObjectURL(url);
-
-        let { width, height } = img;
-        const longest = Math.max(width, height);
-
-        // skip resize if already small enough
-        if (longest <= MAX_DIMENSION) {
-          // still convert to JPEG for consistency & smaller size
-          const canvas = document.createElement('canvas');
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-          canvas.toBlob(blob => {
-            if (blob) resolve(blob);
-            else reject(new Error('Canvas toBlob failed'));
-          }, 'image/jpeg', JPEG_QUALITY);
-          return;
-        }
-
-        const scale = MAX_DIMENSION / longest;
-        const newW = Math.round(width * scale);
-        const newH = Math.round(height * scale);
-
-        const canvas = document.createElement('canvas');
-        canvas.width = newW;
-        canvas.height = newH;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, newW, newH);
-        canvas.toBlob(blob => {
-          if (blob) resolve(blob);
-          else reject(new Error('Canvas toBlob failed'));
-        }, 'image/jpeg', JPEG_QUALITY);
+        let { width: w, height: h } = img;
+        const s = Math.max(w, h) > maxDim ? maxDim / Math.max(w, h) : 1;
+        const nw = Math.round(w * s), nh = Math.round(h * s);
+        const c = document.createElement('canvas');
+        c.width = nw; c.height = nh;
+        c.getContext('2d').drawImage(img, 0, 0, nw, nh);
+        c.toBlob(b => b ? res(b) : rej(new Error('toBlob fail')), 'image/jpeg', quality);
       };
-
-      img.onerror = () => {
-        URL.revokeObjectURL(url);
-        reject(new Error('Image load failed'));
-      };
-
+      img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('load fail')); };
       img.src = url;
     });
+  }
+
+  async function processFile(file) {
+    const [photo, thumb] = await Promise.all([
+      resizeToBlob(file, MAX_DIM, JPEG_Q),
+      resizeToBlob(file, THUMB_DIM, THUMB_Q),
+    ]);
+    return { photo, thumb };
   }
 
   // ── Elements ──
   const el = {
     setup: document.getElementById('setup'),
     slideshow: document.getElementById('slideshow'),
-    uploadZone: document.getElementById('uploadZone'),
-    uploadEmpty: document.getElementById('uploadEmpty'),
-    uploadLoaded: document.getElementById('uploadLoaded'),
     fileInput: document.getElementById('fileInput'),
     folderInput: document.getElementById('folderInput'),
-    photoCount: document.getElementById('photoCount'),
+    thumbSection: document.getElementById('thumbSection'),
+    thumbCount: document.getElementById('thumbCount'),
+    thumbGrid: document.getElementById('thumbGrid'),
     intervalVal: document.getElementById('intervalVal'),
     startBtn: document.getElementById('startBtn'),
-    clearBtn: document.getElementById('clearBtn'),
     exitBtn: document.getElementById('exitBtn'),
     pauseBtn: document.getElementById('pauseBtn'),
     counter: document.getElementById('photo-counter'),
@@ -717,117 +767,204 @@
     progressText: document.getElementById('progressText'),
   };
 
-  // ── UI Update ──
-  function updateUI() {
-    const has = photoCount > 0;
-    el.uploadEmpty.style.display = has ? 'none' : 'block';
-    el.uploadLoaded.style.display = has ? 'block' : 'none';
-    el.photoCount.textContent = photoCount;
-    el.startBtn.disabled = !has;
-    el.clearBtn.style.display = has ? 'block' : 'none';
-    if (has) el.uploadZone.classList.add('has-photos');
-    else el.uploadZone.classList.remove('has-photos');
+  // ── Thumbnail Grid ──
+  let thumbObserver = null;
+
+  function revokeThumbUrls() {
+    thumbBlobUrls.forEach(u => { try { URL.revokeObjectURL(u); } catch(e){} });
+    thumbBlobUrls = [];
   }
 
-  // ── Import Pipeline ──
-  // process files in batches: resize → store in DB → update progress
+  async function buildThumbGrid() {
+    revokeThumbUrls();
+    el.thumbGrid.innerHTML = '';
+    selectedIds.clear();
+    updateSelectionUI();
+
+    const has = photoIds.length > 0;
+    el.thumbSection.classList.toggle('has-photos', has);
+    el.thumbCount.textContent = photoIds.length;
+    el.startBtn.disabled = !has;
+    if (!has) return;
+
+    if (thumbObserver) thumbObserver.disconnect();
+
+    const frag = document.createDocumentFragment();
+    photoIds.forEach(id => {
+      const item = document.createElement('div');
+      item.className = 'thumb-item';
+      item.dataset.pid = id;
+
+      const check = document.createElement('div');
+      check.className = 'thumb-check';
+      check.innerHTML = '<svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>';
+
+      const img = document.createElement('img');
+      img.alt = '';
+      img.dataset.pid = id;
+
+      item.appendChild(check);
+      item.appendChild(img);
+      frag.appendChild(item);
+    });
+    el.thumbGrid.appendChild(frag);
+
+    // lazy-load thumbs as they scroll into view
+    const db = await openDB();
+    thumbObserver = new IntersectionObserver((entries) => {
+      entries.forEach(async (entry) => {
+        if (!entry.isIntersecting) return;
+        const img = entry.target;
+        if (img.src) return;
+        const id = parseInt(img.dataset.pid);
+        try {
+          const blob = await dbGetThumb(db, id);
+          if (blob) {
+            const url = URL.createObjectURL(blob);
+            thumbBlobUrls.push(url);
+            img.src = url;
+            img.onload = () => img.classList.add('loaded');
+          }
+        } catch(e) {}
+        thumbObserver.unobserve(img);
+      });
+    }, { root: el.thumbGrid, rootMargin: '200px' });
+
+    el.thumbGrid.querySelectorAll('img').forEach(img => thumbObserver.observe(img));
+  }
+
+  // ── Selection UI ──
+  function updateSelectionUI() {
+    const count = selectedIds.size;
+    const hasSelection = count > 0;
+    const allSelected = count === photoIds.length && count > 0;
+
+    document.getElementById('selectAllBtn').classList.toggle('hidden', allSelected);
+    document.getElementById('deselectAllBtn').classList.toggle('hidden', !hasSelection);
+    document.getElementById('removeSelectedBtn').classList.toggle('hidden', !hasSelection);
+    document.getElementById('removeSelectedBtn').textContent = hasSelection
+      ? `Remove ${count} Selected` : 'Remove Selected';
+  }
+
+  // tap thumbnail to toggle selection
+  el.thumbGrid.addEventListener('click', (e) => {
+    const item = e.target.closest('.thumb-item');
+    if (!item) return;
+    const id = parseInt(item.dataset.pid);
+    if (selectedIds.has(id)) {
+      selectedIds.delete(id);
+      item.classList.remove('selected');
+    } else {
+      selectedIds.add(id);
+      item.classList.add('selected');
+    }
+    updateSelectionUI();
+  });
+
+  // select all
+  document.getElementById('selectAllBtn').addEventListener('click', () => {
+    photoIds.forEach(id => selectedIds.add(id));
+    el.thumbGrid.querySelectorAll('.thumb-item').forEach(el => el.classList.add('selected'));
+    updateSelectionUI();
+  });
+
+  // deselect all
+  document.getElementById('deselectAllBtn').addEventListener('click', () => {
+    selectedIds.clear();
+    el.thumbGrid.querySelectorAll('.thumb-item').forEach(el => el.classList.remove('selected'));
+    updateSelectionUI();
+  });
+
+  // remove selected
+  document.getElementById('removeSelectedBtn').addEventListener('click', async () => {
+    const count = selectedIds.size;
+    if (!count) return;
+    if (!confirm(`Remove ${count} selected photo${count > 1 ? 's' : ''}?`)) return;
+
+    const toDelete = Array.from(selectedIds);
+    // visual feedback — fade them out
+    el.thumbGrid.querySelectorAll('.thumb-item.selected').forEach(el => {
+      el.style.opacity = '0.2';
+      el.style.pointerEvents = 'none';
+    });
+
+    try {
+      const db = await openDB();
+      for (const id of toDelete) {
+        await dbDeletePhoto(db, id);
+      }
+      photoIds = photoIds.filter(k => !selectedIds.has(k));
+      selectedIds.clear();
+    } catch(e) { console.warn('Batch delete failed', e); }
+
+    buildThumbGrid();
+  });
+
+  // clear all
+  document.getElementById('clearAllBtn').addEventListener('click', async () => {
+    if (!confirm('Remove all ' + photoIds.length + ' photos?')) return;
+    try { await dbClearAll(await openDB()); } catch(e) {}
+    photoIds = [];
+    selectedIds.clear();
+    revokeThumbUrls();
+    buildThumbGrid();
+  });
+
+  // ── Import ──
   async function handleFiles(fileList) {
     const files = Array.from(fileList).filter(f => f.type.startsWith('image/'));
     if (!files.length) return;
-
     const total = files.length;
-    let processed = 0;
-    let failed = 0;
+    let done = 0, fail = 0;
 
     el.progressWrap.classList.add('active');
     el.progressBar.style.width = '0%';
-    el.progressText.textContent = `Processing 0 / ${total}`;
+    el.progressText.textContent = `0 / ${total}`;
 
     const db = await openDB();
-
-    // process in batches to avoid overwhelming the browser
-    for (let i = 0; i < total; i += BATCH_SIZE) {
-      const batch = files.slice(i, i + BATCH_SIZE);
-      const promises = batch.map(async (file) => {
+    for (let i = 0; i < total; i += BATCH) {
+      const batch = files.slice(i, i + BATCH);
+      await Promise.all(batch.map(async (f) => {
         try {
-          const resized = await resizeImage(file);
-          await savePhoto(db, resized);
-        } catch (e) {
-          console.warn('Skipped file:', file.name, e);
-          failed++;
-        }
-        processed++;
-        const pct = Math.round((processed / total) * 100);
-        el.progressBar.style.width = pct + '%';
-        el.progressText.textContent = `Processing ${processed} / ${total}`;
-      });
-      await Promise.all(promises);
-
-      // let the UI breathe between batches
+          const { photo, thumb } = await processFile(f);
+          await dbSavePhotoAndThumb(db, photo, thumb);
+        } catch(e) { fail++; }
+        done++;
+        el.progressBar.style.width = Math.round((done / total) * 100) + '%';
+        el.progressText.textContent = `${done} / ${total}`;
+      }));
       await new Promise(r => setTimeout(r, 10));
     }
 
-    // refresh key list and count
-    photoIds = await getAllKeys(db);
-    photoCount = photoIds.length;
-
+    photoIds = await dbGetAllKeys(db);
     setTimeout(() => {
       el.progressWrap.classList.remove('active');
       el.progressBar.style.width = '0%';
       el.progressText.textContent = '';
-    }, 500);
-
-    updateUI();
-
-    if (failed > 0) {
-      console.warn(`Import done. ${failed} file(s) could not be processed.`);
-    }
+    }, 600);
+    buildThumbGrid();
+    if (fail) console.warn(`${fail} file(s) skipped.`);
   }
 
   // ── Upload Events ──
   document.getElementById('pickFilesBtn').addEventListener('click', () => el.fileInput.click());
   document.getElementById('pickFolderBtn').addEventListener('click', () => el.folderInput.click());
-  el.uploadZone.addEventListener('click', () => el.fileInput.click());
+  el.fileInput.addEventListener('change', e => { if (e.target.files.length) handleFiles(e.target.files); e.target.value = ''; });
+  el.folderInput.addEventListener('change', e => { if (e.target.files.length) handleFiles(e.target.files); e.target.value = ''; });
 
-  el.fileInput.addEventListener('change', e => {
-    if (e.target.files.length) handleFiles(e.target.files);
-    e.target.value = ''; // reset so same selection works again
-  });
-
-  el.folderInput.addEventListener('change', e => {
-    if (e.target.files.length) handleFiles(e.target.files);
-    e.target.value = '';
-  });
-
-  el.clearBtn.addEventListener('click', async (e) => {
-    e.stopPropagation();
-    if (confirm('Remove all photos? This cannot be undone.')) {
-      try {
-        const db = await openDB();
-        await clearAllPhotos(db);
-      } catch(e) { console.warn('Clear failed', e); }
-      photoIds = [];
-      photoCount = 0;
-      updateUI();
-    }
-  });
-
-  // ── Settings Controls ──
+  // ── Settings ──
   document.getElementById('intervalDown').addEventListener('click', () => {
     if (interval <= 5) interval = Math.max(3, interval - 1);
     else if (interval <= 15) interval -= 5;
     else interval = Math.max(15, interval - 15);
     el.intervalVal.textContent = interval + 's';
   });
-
   document.getElementById('intervalUp').addEventListener('click', () => {
     if (interval < 5) interval++;
     else if (interval < 15) interval += 5;
     else interval = Math.min(120, interval + 15);
     el.intervalVal.textContent = interval + 's';
   });
-
-  // init display
   el.intervalVal.textContent = interval + 's';
 
   document.querySelectorAll('[data-transition]').forEach(btn => {
@@ -837,7 +974,6 @@
       transition = btn.dataset.transition;
     });
   });
-
   document.querySelectorAll('[data-order]').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('[data-order]').forEach(b => b.classList.remove('active'));
@@ -845,7 +981,6 @@
       order = btn.dataset.order;
     });
   });
-
   document.querySelectorAll('[data-fit]').forEach(btn => {
     btn.addEventListener('click', () => {
       document.querySelectorAll('[data-fit]').forEach(b => b.classList.remove('active'));
@@ -855,8 +990,7 @@
   });
 
   // ── Slideshow Engine ──
-  // only loads current photo from DB on demand, preloads next
-  let db = null; // keep connection open during slideshow
+  let ssDb = null;
 
   function buildOrder() {
     shuffledOrder = Array.from({ length: photoIds.length }, (_, i) => i);
@@ -868,78 +1002,49 @@
     }
   }
 
-  function revokeUrl(url) {
-    if (url) {
-      try { URL.revokeObjectURL(url); } catch(e) {}
-    }
-  }
+  function revokeUrl(u) { if (u) try { URL.revokeObjectURL(u); } catch(e){} }
 
-  async function loadPhotoUrl(index) {
-    const dbKey = photoIds[shuffledOrder[index]];
-    const blob = await getPhoto(db, dbKey);
-    if (!blob) return null;
-    return URL.createObjectURL(blob);
+  async function loadPhotoUrl(idx) {
+    const blob = await dbGetPhoto(ssDb, photoIds[shuffledOrder[idx]]);
+    return blob ? URL.createObjectURL(blob) : null;
   }
 
   async function showPhoto() {
     let url;
-
-    // use preloaded if available for this index
     if (preloadedIndex === currentIndex && preloadedBlobUrl) {
-      url = preloadedBlobUrl;
-      preloadedBlobUrl = null;
-      preloadedIndex = -1;
+      url = preloadedBlobUrl; preloadedBlobUrl = null; preloadedIndex = -1;
     } else {
       url = await loadPhotoUrl(currentIndex);
     }
-
     if (!url) return;
 
-    // revoke old current
-    const incoming = useSlideA ? el.slideA : el.slideB;
-    const outgoing = useSlideA ? el.slideB : el.slideA;
+    const inc = useSlideA ? el.slideA : el.slideB;
+    const out = useSlideA ? el.slideB : el.slideA;
 
-    incoming.style.backgroundImage = `url('${url}')`;
-    incoming.style.backgroundSize = (transition === 'kenburns' || fit === 'cover') ? 'cover' : 'contain';
+    inc.style.backgroundImage = `url('${url}')`;
+    inc.style.backgroundSize = (transition === 'kenburns' || fit === 'cover') ? 'cover' : 'contain';
 
-    // ken burns: randomize direction
-    incoming.classList.remove('ken-burns', 'kb-a', 'kb-b', 'kb-c');
+    inc.classList.remove('ken-burns', 'kb-a', 'kb-b', 'kb-c');
     if (transition === 'kenburns') {
-      incoming.classList.add('ken-burns');
-      const variants = ['kb-a', 'kb-b', 'kb-c'];
-      incoming.classList.add(variants[kbVariant % 3]);
-      kbVariant++;
+      inc.classList.add('ken-burns', ['kb-a','kb-b','kb-c'][kbVariant++ % 3]);
     }
 
-    incoming.classList.add('visible');
-    outgoing.classList.remove('visible');
+    inc.classList.add('visible');
+    out.classList.remove('visible');
 
-    // after transition completes, revoke the outgoing URL
-    const oldUrl = currentBlobUrl;
-    setTimeout(() => revokeUrl(oldUrl), 2500);
-
+    const old = currentBlobUrl;
+    setTimeout(() => revokeUrl(old), 2500);
     currentBlobUrl = url;
     useSlideA = !useSlideA;
     el.counter.textContent = `${currentIndex + 1} / ${photoIds.length}`;
-
-    // preload next
     preloadNext();
   }
 
   async function preloadNext() {
-    const nextIndex = (currentIndex + 1) % photoIds.length;
-    // don't preload if already preloaded
-    if (preloadedIndex === nextIndex && preloadedBlobUrl) return;
-
-    revokeUrl(preloadedBlobUrl);
-    preloadedBlobUrl = null;
-
-    try {
-      preloadedBlobUrl = await loadPhotoUrl(nextIndex);
-      preloadedIndex = nextIndex;
-    } catch(e) {
-      // non-critical
-    }
+    const ni = (currentIndex + 1) % photoIds.length;
+    if (preloadedIndex === ni && preloadedBlobUrl) return;
+    revokeUrl(preloadedBlobUrl); preloadedBlobUrl = null;
+    try { preloadedBlobUrl = await loadPhotoUrl(ni); preloadedIndex = ni; } catch(e) {}
   }
 
   async function advance() {
@@ -949,16 +1054,18 @@
   }
 
   async function startSlideshow() {
-    db = await openDB();
-    photoIds = await getAllKeys(db);
+    ssDb = await openDB();
+    photoIds = await dbGetAllKeys(ssDb);
     if (!photoIds.length) return;
 
-    buildOrder();
-    currentIndex = 0;
-    kbVariant = 0;
+    revokeThumbUrls();
+    if (thumbObserver) thumbObserver.disconnect();
 
-    el.slideA.classList.remove('visible', 'ken-burns', 'kb-a', 'kb-b', 'kb-c');
-    el.slideB.classList.remove('visible', 'ken-burns', 'kb-a', 'kb-b', 'kb-c');
+    buildOrder();
+    currentIndex = 0; kbVariant = 0;
+
+    el.slideA.classList.remove('visible','ken-burns','kb-a','kb-b','kb-c');
+    el.slideB.classList.remove('visible','ken-burns','kb-a','kb-b','kb-c');
     el.slideA.style.backgroundImage = '';
     el.slideB.style.backgroundImage = '';
 
@@ -967,7 +1074,6 @@
     playing = true;
 
     document.documentElement.style.setProperty('--transition-speed', Math.min(interval * 0.3, 2) + 's');
-
     await showPhoto();
     timer = setInterval(() => advance(), interval * 1000);
     flashControls();
@@ -975,38 +1081,27 @@
 
   function stopSlideshow() {
     playing = false;
-    clearInterval(timer);
-    timer = null;
-
-    // clean up blob URLs
-    revokeUrl(currentBlobUrl);
-    revokeUrl(preloadedBlobUrl);
-    currentBlobUrl = null;
-    preloadedBlobUrl = null;
-    preloadedIndex = -1;
-
+    clearInterval(timer); timer = null;
+    revokeUrl(currentBlobUrl); revokeUrl(preloadedBlobUrl);
+    currentBlobUrl = null; preloadedBlobUrl = null; preloadedIndex = -1;
     el.slideA.style.backgroundImage = '';
     el.slideB.style.backgroundImage = '';
     el.slideshow.classList.remove('active', 'show-controls');
     el.setup.style.display = 'flex';
+    buildThumbGrid();
   }
 
   function flashControls() {
     el.slideshow.classList.add('show-controls');
     clearTimeout(controlsTimer);
-    controlsTimer = setTimeout(() => {
-      el.slideshow.classList.remove('show-controls');
-    }, 3500);
+    controlsTimer = setTimeout(() => el.slideshow.classList.remove('show-controls'), 3500);
   }
 
   el.startBtn.addEventListener('click', startSlideshow);
   el.exitBtn.addEventListener('click', stopSlideshow);
-
   el.pauseBtn.addEventListener('click', () => {
     if (playing) {
-      clearInterval(timer);
-      timer = null;
-      playing = false;
+      clearInterval(timer); timer = null; playing = false;
       el.pauseBtn.textContent = '▶ Play';
     } else {
       playing = true;
@@ -1015,22 +1110,18 @@
     }
     flashControls();
   });
-
   el.slideshow.addEventListener('click', (e) => {
     if (e.target.closest('#slideshow-controls')) return;
     flashControls();
   });
 
-  // ── Init: count saved photos ──
+  // ── Init ──
   (async () => {
     try {
-      const d = await openDB();
-      photoIds = await getAllKeys(d);
-      photoCount = photoIds.length;
-      updateUI();
-    } catch(e) {
-      console.warn('DB init failed', e);
-    }
+      const db = await openDB();
+      photoIds = await dbGetAllKeys(db);
+      buildThumbGrid();
+    } catch(e) { console.warn('DB init failed', e); }
   })();
 
 })();
