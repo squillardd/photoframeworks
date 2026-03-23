@@ -46,7 +46,6 @@
     cursor: none;
     z-index: 50;
   }
-
   #slideshow.active { display: block; }
 
   .slide {
@@ -58,23 +57,21 @@
     transition: opacity var(--transition-speed) ease-in-out;
     will-change: opacity;
   }
-
   .slide.visible { opacity: 1; }
   .slide.ken-burns { background-size: cover; }
+  .slide.kb-a { animation: kb-a 20s ease-in-out forwards; }
+  .slide.kb-b { animation: kb-b 20s ease-in-out forwards; }
+  .slide.kb-c { animation: kb-c 20s ease-in-out forwards; }
 
-  .slide.kb-a { animation: kenburns-a 20s ease-in-out forwards; }
-  .slide.kb-b { animation: kenburns-b 20s ease-in-out forwards; }
-  .slide.kb-c { animation: kenburns-c 20s ease-in-out forwards; }
-
-  @keyframes kenburns-a {
+  @keyframes kb-a {
     0%   { transform: scale(1.0) translate(0, 0); }
     100% { transform: scale(1.1) translate(-1.5%, -1%); }
   }
-  @keyframes kenburns-b {
+  @keyframes kb-b {
     0%   { transform: scale(1.05) translate(1%, 0); }
     100% { transform: scale(1.0) translate(-0.5%, 1%); }
   }
-  @keyframes kenburns-c {
+  @keyframes kb-c {
     0%   { transform: scale(1.0) translate(0.5%, 0.5%); }
     100% { transform: scale(1.08) translate(0%, -1.5%); }
   }
@@ -91,7 +88,6 @@
     transition: opacity 0.4s;
     z-index: 10;
   }
-
   #slideshow.show-controls #slideshow-controls { opacity: 1; }
 
   .ss-btn {
@@ -106,9 +102,7 @@
     font-size: 14px;
     font-weight: 400;
     cursor: pointer;
-    transition: background 0.2s;
   }
-
   .ss-btn:active { background: rgba(255,255,255,0.25); }
 
   #photo-counter {
@@ -118,16 +112,14 @@
     letter-spacing: 0.5px;
   }
 
-  /* ── SETUP SCREEN ── */
+  /* ── SETUP ── */
   #setup {
     height: 100vh;
     height: 100dvh;
     display: flex;
     flex-direction: column;
-    position: relative;
     overflow: hidden;
   }
-
   #setup::before {
     content: '';
     position: fixed; inset: 0;
@@ -143,7 +135,6 @@
     position: relative;
     z-index: 2;
   }
-
   .setup-scroll {
     flex: 1;
     overflow-y: auto;
@@ -152,7 +143,6 @@
     position: relative;
     z-index: 1;
   }
-
   .setup-inner {
     max-width: 520px;
     margin: 0 auto;
@@ -166,7 +156,6 @@
     margin-left: auto;
     margin-right: auto;
   }
-
   .logo-icon {
     width: 44px; height: 44px;
     margin: 0 auto 14px;
@@ -177,29 +166,12 @@
     justify-content: center;
     background: var(--surface);
   }
-
   .logo-icon svg { width: 20px; height: 20px; stroke: var(--accent); fill: none; stroke-width: 1.5; }
+  .logo h1 { font-size: 20px; font-weight: 400; letter-spacing: -0.3px; }
+  .logo p { font-size: 12px; color: var(--text-dim); margin-top: 4px; font-weight: 300; }
 
-  .logo h1 {
-    font-size: 20px;
-    font-weight: 400;
-    letter-spacing: -0.3px;
-    color: var(--text);
-  }
-
-  .logo p {
-    font-size: 12px;
-    color: var(--text-dim);
-    margin-top: 4px;
-    font-weight: 300;
-  }
-
-  .upload-row {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-
+  /* upload buttons */
+  .upload-row { display: flex; gap: 10px; margin-bottom: 20px; }
   .upload-btn {
     flex: 1;
     padding: 14px 16px;
@@ -214,13 +186,11 @@
     text-align: center;
     transition: all 0.2s;
   }
-
   .upload-btn:active {
     background: var(--accent-dim);
     border-color: var(--accent);
     color: var(--accent);
   }
-
   .upload-btn svg {
     display: block;
     margin: 0 auto 6px;
@@ -229,13 +199,12 @@
     fill: none;
     stroke-width: 1.5;
   }
+  .upload-btn.hidden { display: none; }
+  /* if folder btn is hidden, photo btn goes full width */
+  .upload-row:has(.hidden) .upload-btn:not(.hidden) { flex: 1; }
 
   /* ── THUMBNAIL GRID ── */
-  .thumb-section {
-    margin-bottom: 20px;
-    display: none;
-  }
-
+  .thumb-section { margin-bottom: 20px; display: none; }
   .thumb-section.has-photos { display: block; }
 
   .thumb-header {
@@ -246,24 +215,10 @@
     gap: 10px;
     flex-wrap: wrap;
   }
+  .thumb-count { font-size: 13px; color: var(--text-dim); font-weight: 300; }
+  .thumb-count strong { color: var(--accent); font-weight: 500; }
 
-  .thumb-count {
-    font-size: 13px;
-    color: var(--text-dim);
-    font-weight: 300;
-  }
-
-  .thumb-count strong {
-    color: var(--accent);
-    font-weight: 500;
-  }
-
-  .thumb-actions {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-
+  .thumb-actions { display: flex; gap: 6px; flex-wrap: wrap; }
   .thumb-act-btn {
     padding: 6px 12px;
     border-radius: 8px;
@@ -276,17 +231,13 @@
     background: var(--surface);
     color: var(--text-dim);
   }
-
   .thumb-act-btn:active { background: var(--surface-hover); }
-
   .thumb-act-btn.danger {
     background: var(--danger-dim);
     border-color: rgba(194, 95, 95, 0.3);
     color: var(--danger);
   }
-
   .thumb-act-btn.danger:active { background: rgba(194, 95, 95, 0.3); }
-
   .thumb-act-btn.hidden { display: none; }
 
   .thumb-grid {
@@ -310,10 +261,7 @@
     transition: border-color 0.15s, opacity 0.2s;
     cursor: pointer;
   }
-
-  .thumb-item.selected {
-    border-color: var(--accent);
-  }
+  .thumb-item.selected { border-color: var(--accent); }
 
   .thumb-check {
     position: absolute;
@@ -329,23 +277,19 @@
     transition: all 0.15s;
     pointer-events: none;
   }
-
   .thumb-check svg {
     width: 12px; height: 12px;
-    stroke: #fff;
-    fill: none;
+    stroke: #fff; fill: none;
     stroke-width: 2.5;
     stroke-linecap: round;
     stroke-linejoin: round;
     opacity: 0;
     transition: opacity 0.15s;
   }
-
   .thumb-item.selected .thumb-check {
     background: var(--accent);
     border-color: var(--accent);
   }
-
   .thumb-item.selected .thumb-check svg { opacity: 1; }
 
   .thumb-item img {
@@ -355,14 +299,10 @@
     opacity: 0;
     transition: opacity 0.25s;
   }
-
   .thumb-item img.loaded { opacity: 1; }
 
-  .thumb-remove { display: none; /* replaced by selection workflow */ }
-
-  /* Settings */
+  /* settings */
   .settings { margin-bottom: 24px; }
-
   .setting-row {
     display: flex;
     align-items: center;
@@ -370,15 +310,8 @@
     padding: 14px 0;
     border-bottom: 1px solid var(--border);
   }
-
   .setting-row:last-child { border-bottom: none; }
-
-  .setting-label {
-    font-size: 14px;
-    font-weight: 400;
-    color: var(--text);
-  }
-
+  .setting-label { font-size: 14px; font-weight: 400; }
   .setting-label small {
     display: block;
     font-size: 11px;
@@ -395,7 +328,6 @@
     border-radius: 10px;
     overflow: hidden;
   }
-
   .stepper button {
     width: 44px; height: 42px;
     background: transparent;
@@ -408,9 +340,7 @@
     justify-content: center;
     font-weight: 300;
   }
-
   .stepper button:active { background: var(--surface-hover); }
-
   .stepper .stepper-val {
     min-width: 54px;
     text-align: center;
@@ -429,7 +359,6 @@
     border-radius: 10px;
     overflow: hidden;
   }
-
   .toggle-opt {
     padding: 10px 16px;
     font-size: 13px;
@@ -441,12 +370,7 @@
     background: transparent;
     font-family: 'DM Sans', sans-serif;
   }
-
-  .toggle-opt.active {
-    background: var(--accent-dim);
-    color: var(--accent);
-  }
-
+  .toggle-opt.active { background: var(--accent-dim); color: var(--accent); }
   .toggle-opt + .toggle-opt { border-left: 1px solid var(--border); }
 
   .start-btn {
@@ -463,41 +387,32 @@
     background: var(--accent);
     color: var(--bg);
   }
-
   .start-btn:disabled {
     background: var(--surface);
     color: var(--text-dim);
     cursor: not-allowed;
     border: 1px solid var(--border);
   }
+  .start-btn:not(:disabled):active { transform: scale(0.98); filter: brightness(0.9); }
 
-  .start-btn:not(:disabled):active {
-    transform: scale(0.98);
-    filter: brightness(0.9);
-  }
-
+  /* progress */
   .progress-wrap {
-    position: fixed;
-    top: 0; left: 0; right: 0;
+    position: fixed; top: 0; left: 0; right: 0;
     height: 3px;
     background: rgba(255,255,255,0.05);
     z-index: 100;
     display: none;
   }
-
   .progress-wrap.active { display: block; }
-
   .progress-bar {
     height: 100%;
     background: var(--accent);
     width: 0%;
     transition: width 0.15s ease-out;
   }
-
   .progress-text {
     position: fixed;
-    top: 12px;
-    left: 50%;
+    top: 12px; left: 50%;
     transform: translateX(-50%);
     font-size: 12px;
     color: var(--text-dim);
@@ -510,14 +425,33 @@
     border: 1px solid var(--border);
     white-space: nowrap;
   }
-
   .progress-wrap.active ~ .progress-text { display: block; }
+
+  /* error toast */
+  .toast {
+    position: fixed;
+    bottom: 24px; left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--surface);
+    border: 1px solid var(--danger);
+    color: var(--text);
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 400;
+    z-index: 200;
+    transition: transform 0.3s ease-out;
+    max-width: 90vw;
+    text-align: center;
+  }
+  .toast.visible { transform: translateX(-50%) translateY(0); }
 </style>
 </head>
 <body>
 
 <div class="progress-wrap" id="progressWrap"><div class="progress-bar" id="progressBar"></div></div>
 <div class="progress-text" id="progressText"></div>
+<div class="toast" id="toast"></div>
 
 <div id="setup">
   <div class="setup-header">
@@ -545,7 +479,7 @@
       </div>
 
       <input type="file" id="fileInput" multiple accept="image/*" style="display:none">
-      <input type="file" id="folderInput" webkitdirectory multiple accept="image/*" style="display:none">
+      <input type="file" id="folderInput" webkitdirectory multiple style="display:none">
 
       <div class="thumb-section" id="thumbSection">
         <div class="thumb-header">
@@ -572,7 +506,6 @@
             <button id="intervalUp">+</button>
           </div>
         </div>
-
         <div class="setting-row">
           <div class="setting-label">Transition</div>
           <div class="toggle-wrap">
@@ -580,7 +513,6 @@
             <button class="toggle-opt" data-transition="kenburns">Ken Burns</button>
           </div>
         </div>
-
         <div class="setting-row">
           <div class="setting-label">Order</div>
           <div class="toggle-wrap">
@@ -588,7 +520,6 @@
             <button class="toggle-opt" data-order="sequential">In Order</button>
           </div>
         </div>
-
         <div class="setting-row">
           <div class="setting-label">
             Fit
@@ -620,16 +551,23 @@
 (function() {
   'use strict';
 
-  const MAX_DIM = 1920;
-  const THUMB_DIM = 150;
-  const JPEG_Q = 0.82;
-  const THUMB_Q = 0.6;
-  const DB_NAME = 'PhotoFrameDB';
-  const DB_VER = 3;
+  // ── Config ──
+  const MAX_DIM = 1920;       // slideshow image longest edge
+  const THUMB_DIM = 150;      // thumbnail longest edge
+  const JPEG_Q = 0.82;        // slideshow quality
+  const THUMB_Q = 0.6;        // thumbnail quality
+  const DB_NAME = 'PhotoFrameDB_v2';  // new DB name — clean break from old bugged versions
+  const DB_VER = 1;            // fresh version 1 since new DB name
   const P_STORE = 'photos';
-  const T_STORE = 'thumbnails';
-  const BATCH = 5;
+  const T_STORE = 'thumbs';
 
+  // ── Image file extensions for MIME fallback ──
+  const IMG_EXTS = new Set([
+    'jpg','jpeg','png','gif','webp','bmp','tiff','tif',
+    'heic','heif','avif','svg','ico'
+  ]);
+
+  // ── State ──
   let photoIds = [];
   let interval = 10;
   let transition = 'fade';
@@ -647,103 +585,214 @@
   let preloadedIndex = -1;
   let thumbBlobUrls = [];
   let selectedIds = new Set();
+  let importing = false;       // guard against concurrent imports
 
-  // ── DB ──
+  // ── Toast ──
+  let toastTimer = null;
+  function showToast(msg, duration) {
+    duration = duration || 4000;
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('visible');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('visible'), duration);
+  }
+
+  // ── DB with proper upgrade + blocked handling ──
   function openDB() {
-    return new Promise((res, rej) => {
-      const r = indexedDB.open(DB_NAME, DB_VER);
-      r.onupgradeneeded = e => {
-        const db = e.target.result;
-        if (!db.objectStoreNames.contains(P_STORE))
-          db.createObjectStore(P_STORE, { keyPath: 'id', autoIncrement: true });
-        if (!db.objectStoreNames.contains(T_STORE))
-          db.createObjectStore(T_STORE, { keyPath: 'id' });
+    return new Promise((resolve, reject) => {
+      let blocked = false;
+      const req = indexedDB.open(DB_NAME, DB_VER);
+
+      req.onblocked = () => {
+        // another tab/instance has the DB open at an old version
+        blocked = true;
+        reject(new Error('DB blocked — close other tabs with this site and retry'));
       };
-      r.onsuccess = e => res(e.target.result);
-      r.onerror = e => rej(e.target.error);
+
+      req.onupgradeneeded = (e) => {
+        const db = e.target.result;
+        if (!db.objectStoreNames.contains(P_STORE)) {
+          db.createObjectStore(P_STORE, { keyPath: 'id', autoIncrement: true });
+        }
+        if (!db.objectStoreNames.contains(T_STORE)) {
+          db.createObjectStore(T_STORE, { keyPath: 'id' });
+        }
+      };
+
+      req.onsuccess = (e) => {
+        if (blocked) return;  // already rejected
+        const db = e.target.result;
+        // if another tab upgrades the DB, close our connection so it can proceed
+        db.onversionchange = () => { db.close(); };
+        resolve(db);
+      };
+
+      req.onerror = (e) => {
+        if (blocked) return;
+        reject(e.target.error || new Error('DB open failed'));
+      };
+
+      // timeout safety: if DB open hangs for >5s, reject
+      setTimeout(() => {
+        if (!blocked) {
+          // check if still pending by testing if req.readyState === 'done'
+          // if not done, we're stuck
+        }
+      }, 5000);
     });
   }
 
-  function dbSavePhotoAndThumb(db, pBlob, tBlob) {
-    return new Promise((res, rej) => {
+  // ── DB Operations ──
+  // save photo + thumbnail sequentially in one transaction
+  function dbSave(db, photoBlob, thumbBlob) {
+    return new Promise((resolve, reject) => {
       const tx = db.transaction([P_STORE, T_STORE], 'readwrite');
-      const pr = tx.objectStore(P_STORE).add({ blob: pBlob });
-      pr.onsuccess = () => tx.objectStore(T_STORE).put({ id: pr.result, blob: tBlob });
-      tx.oncomplete = () => res(pr.result);
-      tx.onerror = () => rej(tx.error);
+      const pStore = tx.objectStore(P_STORE);
+      const tStore = tx.objectStore(T_STORE);
+
+      const addReq = pStore.add({ blob: photoBlob });
+      addReq.onsuccess = () => {
+        // now save thumb with same ID
+        tStore.put({ id: addReq.result, blob: thumbBlob });
+      };
+      addReq.onerror = () => reject(addReq.error);
+
+      tx.oncomplete = () => resolve(addReq.result);
+      tx.onerror = () => reject(tx.error);
+      tx.onabort = () => reject(tx.error || new Error('Transaction aborted'));
     });
   }
 
-  function dbGetAllKeys(db) {
-    return new Promise((res, rej) => {
-      const r = db.transaction(P_STORE, 'readonly').objectStore(P_STORE).getAllKeys();
-      r.onsuccess = () => res(r.result);
-      r.onerror = () => rej(r.error);
+  function dbGetKeys(db) {
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(P_STORE, 'readonly');
+      const req = tx.objectStore(P_STORE).getAllKeys();
+      req.onsuccess = () => resolve(req.result);
+      req.onerror = () => reject(req.error);
     });
   }
 
   function dbGetPhoto(db, id) {
-    return new Promise((res, rej) => {
-      const r = db.transaction(P_STORE, 'readonly').objectStore(P_STORE).get(id);
-      r.onsuccess = () => res(r.result ? r.result.blob : null);
-      r.onerror = () => rej(r.error);
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(P_STORE, 'readonly');
+      const req = tx.objectStore(P_STORE).get(id);
+      req.onsuccess = () => resolve(req.result ? req.result.blob : null);
+      req.onerror = () => reject(req.error);
     });
   }
 
   function dbGetThumb(db, id) {
-    return new Promise((res, rej) => {
-      const r = db.transaction(T_STORE, 'readonly').objectStore(T_STORE).get(id);
-      r.onsuccess = () => res(r.result ? r.result.blob : null);
-      r.onerror = () => rej(r.error);
+    return new Promise((resolve, reject) => {
+      const tx = db.transaction(T_STORE, 'readonly');
+      const req = tx.objectStore(T_STORE).get(id);
+      req.onsuccess = () => resolve(req.result ? req.result.blob : null);
+      req.onerror = () => reject(req.error);
     });
   }
 
-  function dbDeletePhoto(db, id) {
-    return new Promise((res, rej) => {
+  function dbDelete(db, id) {
+    return new Promise((resolve, reject) => {
       const tx = db.transaction([P_STORE, T_STORE], 'readwrite');
       tx.objectStore(P_STORE).delete(id);
       tx.objectStore(T_STORE).delete(id);
-      tx.oncomplete = res;
-      tx.onerror = () => rej(tx.error);
+      tx.oncomplete = resolve;
+      tx.onerror = () => reject(tx.error);
     });
   }
 
   function dbClearAll(db) {
-    return new Promise((res, rej) => {
+    return new Promise((resolve, reject) => {
       const tx = db.transaction([P_STORE, T_STORE], 'readwrite');
       tx.objectStore(P_STORE).clear();
       tx.objectStore(T_STORE).clear();
-      tx.oncomplete = res;
-      tx.onerror = () => rej(tx.error);
+      tx.oncomplete = resolve;
+      tx.onerror = () => reject(tx.error);
     });
   }
 
   // ── Image Processing ──
-  function resizeToBlob(file, maxDim, quality) {
-    return new Promise((res, rej) => {
+  // decode once, produce both sizes sequentially to avoid OOM on old iPads
+  function decodeImage(file) {
+    return new Promise((resolve, reject) => {
       const img = new Image();
       const url = URL.createObjectURL(file);
       img.onload = () => {
         URL.revokeObjectURL(url);
-        let { width: w, height: h } = img;
-        const s = Math.max(w, h) > maxDim ? maxDim / Math.max(w, h) : 1;
-        const nw = Math.round(w * s), nh = Math.round(h * s);
-        const c = document.createElement('canvas');
-        c.width = nw; c.height = nh;
-        c.getContext('2d').drawImage(img, 0, 0, nw, nh);
-        c.toBlob(b => b ? res(b) : rej(new Error('toBlob fail')), 'image/jpeg', quality);
+        resolve(img);
       };
-      img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('load fail')); };
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error('Image decode failed: ' + (file.name || 'unknown')));
+      };
       img.src = url;
     });
   }
 
+  function canvasToBlob(canvas, quality) {
+    return new Promise((resolve, reject) => {
+      // try toBlob first, fall back to toDataURL
+      if (canvas.toBlob) {
+        canvas.toBlob(
+          (blob) => blob ? resolve(blob) : reject(new Error('toBlob returned null')),
+          'image/jpeg',
+          quality
+        );
+      } else {
+        // fallback for very old browsers
+        try {
+          const dataUrl = canvas.toDataURL('image/jpeg', quality);
+          const parts = dataUrl.split(',');
+          const bin = atob(parts[1]);
+          const arr = new Uint8Array(bin.length);
+          for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
+          resolve(new Blob([arr], { type: 'image/jpeg' }));
+        } catch(e) {
+          reject(e);
+        }
+      }
+    });
+  }
+
+  function renderToCanvas(img, maxDim) {
+    const w = img.naturalWidth || img.width;
+    const h = img.naturalHeight || img.height;
+    const longest = Math.max(w, h);
+    const scale = longest > maxDim ? maxDim / longest : 1;
+    const nw = Math.round(w * scale);
+    const nh = Math.round(h * scale);
+
+    const canvas = document.createElement('canvas');
+    canvas.width = nw;
+    canvas.height = nh;
+    canvas.getContext('2d').drawImage(img, 0, 0, nw, nh);
+    return canvas;
+  }
+
+  // process one file: decode once, render two sizes sequentially
   async function processFile(file) {
-    const [photo, thumb] = await Promise.all([
-      resizeToBlob(file, MAX_DIM, JPEG_Q),
-      resizeToBlob(file, THUMB_DIM, THUMB_Q),
-    ]);
-    return { photo, thumb };
+    const img = await decodeImage(file);
+
+    // render full size first
+    const photoCanvas = renderToCanvas(img, MAX_DIM);
+    const photoBlob = await canvasToBlob(photoCanvas, JPEG_Q);
+
+    // then thumbnail (reuses the already-decoded img — no second network/decode hit)
+    const thumbCanvas = renderToCanvas(img, THUMB_DIM);
+    const thumbBlob = await canvasToBlob(thumbCanvas, THUMB_Q);
+
+    return { photo: photoBlob, thumb: thumbBlob };
+  }
+
+  // ── File Filtering ──
+  // check if a file is an image by MIME type, falling back to extension
+  function isImageFile(f) {
+    if (f.type && f.type.startsWith('image/')) return true;
+    // MIME type missing (common with webkitdirectory on some browsers)
+    const name = (f.name || '').toLowerCase();
+    const dot = name.lastIndexOf('.');
+    if (dot === -1) return false;
+    return IMG_EXTS.has(name.slice(dot + 1));
   }
 
   // ── Elements ──
@@ -765,13 +814,30 @@
     progressWrap: document.getElementById('progressWrap'),
     progressBar: document.getElementById('progressBar'),
     progressText: document.getElementById('progressText'),
+    selectAllBtn: document.getElementById('selectAllBtn'),
+    deselectAllBtn: document.getElementById('deselectAllBtn'),
+    removeSelectedBtn: document.getElementById('removeSelectedBtn'),
+    clearAllBtn: document.getElementById('clearAllBtn'),
+    pickFolderBtn: document.getElementById('pickFolderBtn'),
   };
+
+  // ── Feature detection: hide folder picker on iOS ──
+  (function detectFeatures() {
+    // webkitdirectory is not supported on iOS/iPadOS Safari
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    if (isIOS) {
+      el.pickFolderBtn.classList.add('hidden');
+    }
+  })();
 
   // ── Thumbnail Grid ──
   let thumbObserver = null;
 
   function revokeThumbUrls() {
-    thumbBlobUrls.forEach(u => { try { URL.revokeObjectURL(u); } catch(e){} });
+    for (const u of thumbBlobUrls) {
+      try { URL.revokeObjectURL(u); } catch(e) {}
+    }
     thumbBlobUrls = [];
   }
 
@@ -789,8 +855,9 @@
 
     if (thumbObserver) thumbObserver.disconnect();
 
+    // build DOM
     const frag = document.createDocumentFragment();
-    photoIds.forEach(id => {
+    for (const id of photoIds) {
       const item = document.createElement('div');
       item.className = 'thumb-item';
       item.dataset.pid = id;
@@ -801,56 +868,69 @@
 
       const img = document.createElement('img');
       img.alt = '';
-      img.dataset.pid = id;
+      img.dataset.pid = String(id);
 
       item.appendChild(check);
       item.appendChild(img);
       frag.appendChild(item);
-    });
+    }
     el.thumbGrid.appendChild(frag);
 
-    // lazy-load thumbs as they scroll into view
-    const db = await openDB();
+    // lazy-load thumbnails via IntersectionObserver
+    let thumbDb;
+    try {
+      thumbDb = await openDB();
+    } catch(e) {
+      showToast('Could not open database for thumbnails');
+      return;
+    }
+
     thumbObserver = new IntersectionObserver((entries) => {
-      entries.forEach(async (entry) => {
-        if (!entry.isIntersecting) return;
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
         const img = entry.target;
-        if (img.src) return;
-        const id = parseInt(img.dataset.pid);
-        try {
-          const blob = await dbGetThumb(db, id);
-          if (blob) {
-            const url = URL.createObjectURL(blob);
-            thumbBlobUrls.push(url);
-            img.src = url;
-            img.onload = () => img.classList.add('loaded');
-          }
-        } catch(e) {}
+        const id = parseInt(img.dataset.pid, 10);
         thumbObserver.unobserve(img);
-      });
+
+        // async load — fire and forget per thumbnail
+        (async () => {
+          try {
+            const blob = await dbGetThumb(thumbDb, id);
+            if (blob) {
+              const url = URL.createObjectURL(blob);
+              thumbBlobUrls.push(url);
+              img.src = url;
+              img.onload = () => img.classList.add('loaded');
+            }
+          } catch(e) {
+            // thumbnail missing — could be orphaned data, skip silently
+          }
+        })();
+      }
     }, { root: el.thumbGrid, rootMargin: '200px' });
 
-    el.thumbGrid.querySelectorAll('img').forEach(img => thumbObserver.observe(img));
+    for (const img of el.thumbGrid.querySelectorAll('img')) {
+      thumbObserver.observe(img);
+    }
   }
 
   // ── Selection UI ──
   function updateSelectionUI() {
     const count = selectedIds.size;
-    const hasSelection = count > 0;
-    const allSelected = count === photoIds.length && count > 0;
+    const has = count > 0;
+    const all = count === photoIds.length && count > 0;
 
-    document.getElementById('selectAllBtn').classList.toggle('hidden', allSelected);
-    document.getElementById('deselectAllBtn').classList.toggle('hidden', !hasSelection);
-    document.getElementById('removeSelectedBtn').classList.toggle('hidden', !hasSelection);
-    document.getElementById('removeSelectedBtn').textContent = hasSelection
-      ? `Remove ${count} Selected` : 'Remove Selected';
+    el.selectAllBtn.classList.toggle('hidden', all);
+    el.deselectAllBtn.classList.toggle('hidden', !has);
+    el.removeSelectedBtn.classList.toggle('hidden', !has);
+    el.removeSelectedBtn.textContent = has ? `Remove ${count}` : 'Remove';
   }
 
-  // tap thumbnail to toggle selection
+  // tap to toggle selection
   el.thumbGrid.addEventListener('click', (e) => {
     const item = e.target.closest('.thumb-item');
     if (!item) return;
-    const id = parseInt(item.dataset.pid);
+    const id = parseInt(item.dataset.pid, 10);
     if (selectedIds.has(id)) {
       selectedIds.delete(id);
       item.classList.remove('selected');
@@ -861,96 +941,150 @@
     updateSelectionUI();
   });
 
-  // select all
-  document.getElementById('selectAllBtn').addEventListener('click', () => {
-    photoIds.forEach(id => selectedIds.add(id));
-    el.thumbGrid.querySelectorAll('.thumb-item').forEach(el => el.classList.add('selected'));
+  el.selectAllBtn.addEventListener('click', () => {
+    for (const id of photoIds) selectedIds.add(id);
+    for (const item of el.thumbGrid.querySelectorAll('.thumb-item')) item.classList.add('selected');
     updateSelectionUI();
   });
 
-  // deselect all
-  document.getElementById('deselectAllBtn').addEventListener('click', () => {
+  el.deselectAllBtn.addEventListener('click', () => {
     selectedIds.clear();
-    el.thumbGrid.querySelectorAll('.thumb-item').forEach(el => el.classList.remove('selected'));
+    for (const item of el.thumbGrid.querySelectorAll('.thumb-item')) item.classList.remove('selected');
     updateSelectionUI();
   });
 
-  // remove selected
-  document.getElementById('removeSelectedBtn').addEventListener('click', async () => {
+  el.removeSelectedBtn.addEventListener('click', async () => {
     const count = selectedIds.size;
     if (!count) return;
-    if (!confirm(`Remove ${count} selected photo${count > 1 ? 's' : ''}?`)) return;
+    if (!confirm('Remove ' + count + ' selected photo' + (count > 1 ? 's' : '') + '?')) return;
 
-    const toDelete = Array.from(selectedIds);
-    // visual feedback — fade them out
-    el.thumbGrid.querySelectorAll('.thumb-item.selected').forEach(el => {
-      el.style.opacity = '0.2';
-      el.style.pointerEvents = 'none';
-    });
+    // fade out selected
+    for (const item of el.thumbGrid.querySelectorAll('.thumb-item.selected')) {
+      item.style.opacity = '0.2';
+      item.style.pointerEvents = 'none';
+    }
 
     try {
       const db = await openDB();
-      for (const id of toDelete) {
-        await dbDeletePhoto(db, id);
+      for (const id of selectedIds) {
+        await dbDelete(db, id);
       }
       photoIds = photoIds.filter(k => !selectedIds.has(k));
       selectedIds.clear();
-    } catch(e) { console.warn('Batch delete failed', e); }
-
+    } catch(e) {
+      showToast('Failed to remove some photos');
+    }
     buildThumbGrid();
   });
 
-  // clear all
-  document.getElementById('clearAllBtn').addEventListener('click', async () => {
+  el.clearAllBtn.addEventListener('click', async () => {
+    if (!photoIds.length) return;
     if (!confirm('Remove all ' + photoIds.length + ' photos?')) return;
-    try { await dbClearAll(await openDB()); } catch(e) {}
+    try {
+      const db = await openDB();
+      await dbClearAll(db);
+    } catch(e) {
+      showToast('Failed to clear photos');
+    }
     photoIds = [];
     selectedIds.clear();
     revokeThumbUrls();
     buildThumbGrid();
   });
 
-  // ── Import ──
+  // ── Import Pipeline ──
   async function handleFiles(fileList) {
-    const files = Array.from(fileList).filter(f => f.type.startsWith('image/'));
-    if (!files.length) return;
+    if (importing) {
+      showToast('Import already in progress');
+      return;
+    }
+
+    const files = Array.from(fileList).filter(isImageFile);
+    if (!files.length) {
+      showToast('No image files found in selection');
+      return;
+    }
+
+    importing = true;
     const total = files.length;
-    let done = 0, fail = 0;
+    let done = 0;
+    let fail = 0;
 
     el.progressWrap.classList.add('active');
     el.progressBar.style.width = '0%';
-    el.progressText.textContent = `0 / ${total}`;
+    el.progressText.textContent = '0 / ' + total;
 
-    const db = await openDB();
-    for (let i = 0; i < total; i += BATCH) {
-      const batch = files.slice(i, i + BATCH);
-      await Promise.all(batch.map(async (f) => {
-        try {
-          const { photo, thumb } = await processFile(f);
-          await dbSavePhotoAndThumb(db, photo, thumb);
-        } catch(e) { fail++; }
-        done++;
-        el.progressBar.style.width = Math.round((done / total) * 100) + '%';
-        el.progressText.textContent = `${done} / ${total}`;
-      }));
-      await new Promise(r => setTimeout(r, 10));
+    let db;
+    try {
+      db = await openDB();
+    } catch(e) {
+      showToast('Database error: ' + e.message);
+      el.progressWrap.classList.remove('active');
+      el.progressText.textContent = '';
+      importing = false;
+      return;
     }
 
-    photoIds = await dbGetAllKeys(db);
+    // process ONE AT A TIME to avoid OOM on old iPads
+    // this is slower but dramatically more reliable
+    for (let i = 0; i < total; i++) {
+      try {
+        const { photo, thumb } = await processFile(files[i]);
+        await dbSave(db, photo, thumb);
+      } catch(e) {
+        fail++;
+        console.warn('Skipped:', files[i].name, e.message);
+      }
+
+      done++;
+      el.progressBar.style.width = Math.round((done / total) * 100) + '%';
+      el.progressText.textContent = done + ' / ' + total;
+
+      // yield to UI every 3 files so progress bar actually updates
+      if (done % 3 === 0) {
+        await new Promise(r => setTimeout(r, 0));
+      }
+    }
+
+    // refresh keys
+    try {
+      photoIds = await dbGetKeys(db);
+    } catch(e) {
+      showToast('Failed to refresh photo list');
+    }
+
     setTimeout(() => {
       el.progressWrap.classList.remove('active');
       el.progressBar.style.width = '0%';
       el.progressText.textContent = '';
     }, 600);
+
+    if (fail > 0) {
+      showToast(fail + ' file' + (fail > 1 ? 's' : '') + ' could not be imported');
+    }
+
+    importing = false;
     buildThumbGrid();
-    if (fail) console.warn(`${fail} file(s) skipped.`);
   }
 
   // ── Upload Events ──
-  document.getElementById('pickFilesBtn').addEventListener('click', () => el.fileInput.click());
-  document.getElementById('pickFolderBtn').addEventListener('click', () => el.folderInput.click());
-  el.fileInput.addEventListener('change', e => { if (e.target.files.length) handleFiles(e.target.files); e.target.value = ''; });
-  el.folderInput.addEventListener('change', e => { if (e.target.files.length) handleFiles(e.target.files); e.target.value = ''; });
+  document.getElementById('pickFilesBtn').addEventListener('click', () => {
+    if (importing) return;
+    el.fileInput.click();
+  });
+  el.pickFolderBtn.addEventListener('click', () => {
+    if (importing) return;
+    el.folderInput.click();
+  });
+
+  el.fileInput.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files.length) handleFiles(e.target.files);
+    e.target.value = '';
+  });
+  el.folderInput.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files.length) handleFiles(e.target.files);
+    e.target.value = '';
+  });
 
   // ── Settings ──
   document.getElementById('intervalDown').addEventListener('click', () => {
@@ -967,23 +1101,23 @@
   });
   el.intervalVal.textContent = interval + 's';
 
-  document.querySelectorAll('[data-transition]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('[data-transition]').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('[data-transition]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('[data-transition]').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
       transition = btn.dataset.transition;
     });
   });
-  document.querySelectorAll('[data-order]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('[data-order]').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('[data-order]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('[data-order]').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
       order = btn.dataset.order;
     });
   });
-  document.querySelectorAll('[data-fit]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('[data-fit]').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('[data-fit]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('[data-fit]').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
       fit = btn.dataset.fit;
     });
@@ -993,58 +1127,72 @@
   let ssDb = null;
 
   function buildOrder() {
-    shuffledOrder = Array.from({ length: photoIds.length }, (_, i) => i);
+    shuffledOrder = Array.from({ length: photoIds.length }, function(_, i) { return i; });
     if (order === 'shuffle') {
       for (let i = shuffledOrder.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [shuffledOrder[i], shuffledOrder[j]] = [shuffledOrder[j], shuffledOrder[i]];
+        const tmp = shuffledOrder[i];
+        shuffledOrder[i] = shuffledOrder[j];
+        shuffledOrder[j] = tmp;
       }
     }
   }
 
-  function revokeUrl(u) { if (u) try { URL.revokeObjectURL(u); } catch(e){} }
+  function revokeUrl(u) {
+    if (u) try { URL.revokeObjectURL(u); } catch(e) {}
+  }
 
   async function loadPhotoUrl(idx) {
-    const blob = await dbGetPhoto(ssDb, photoIds[shuffledOrder[idx]]);
+    const key = photoIds[shuffledOrder[idx]];
+    if (key === undefined) return null;
+    const blob = await dbGetPhoto(ssDb, key);
     return blob ? URL.createObjectURL(blob) : null;
   }
 
   async function showPhoto() {
     let url;
     if (preloadedIndex === currentIndex && preloadedBlobUrl) {
-      url = preloadedBlobUrl; preloadedBlobUrl = null; preloadedIndex = -1;
+      url = preloadedBlobUrl;
+      preloadedBlobUrl = null;
+      preloadedIndex = -1;
     } else {
       url = await loadPhotoUrl(currentIndex);
     }
     if (!url) return;
 
-    const inc = useSlideA ? el.slideA : el.slideB;
-    const out = useSlideA ? el.slideB : el.slideA;
+    const incoming = useSlideA ? el.slideA : el.slideB;
+    const outgoing = useSlideA ? el.slideB : el.slideA;
 
-    inc.style.backgroundImage = `url('${url}')`;
-    inc.style.backgroundSize = (transition === 'kenburns' || fit === 'cover') ? 'cover' : 'contain';
+    incoming.style.backgroundImage = 'url(' + url + ')';
+    incoming.style.backgroundSize = (transition === 'kenburns' || fit === 'cover') ? 'cover' : 'contain';
 
-    inc.classList.remove('ken-burns', 'kb-a', 'kb-b', 'kb-c');
+    incoming.classList.remove('ken-burns', 'kb-a', 'kb-b', 'kb-c');
     if (transition === 'kenburns') {
-      inc.classList.add('ken-burns', ['kb-a','kb-b','kb-c'][kbVariant++ % 3]);
+      const variants = ['kb-a', 'kb-b', 'kb-c'];
+      incoming.classList.add('ken-burns', variants[kbVariant % 3]);
+      kbVariant++;
     }
 
-    inc.classList.add('visible');
-    out.classList.remove('visible');
+    incoming.classList.add('visible');
+    outgoing.classList.remove('visible');
 
-    const old = currentBlobUrl;
-    setTimeout(() => revokeUrl(old), 2500);
+    const oldUrl = currentBlobUrl;
+    setTimeout(function() { revokeUrl(oldUrl); }, 2500);
     currentBlobUrl = url;
     useSlideA = !useSlideA;
-    el.counter.textContent = `${currentIndex + 1} / ${photoIds.length}`;
+    el.counter.textContent = (currentIndex + 1) + ' / ' + photoIds.length;
     preloadNext();
   }
 
   async function preloadNext() {
     const ni = (currentIndex + 1) % photoIds.length;
     if (preloadedIndex === ni && preloadedBlobUrl) return;
-    revokeUrl(preloadedBlobUrl); preloadedBlobUrl = null;
-    try { preloadedBlobUrl = await loadPhotoUrl(ni); preloadedIndex = ni; } catch(e) {}
+    revokeUrl(preloadedBlobUrl);
+    preloadedBlobUrl = null;
+    try {
+      preloadedBlobUrl = await loadPhotoUrl(ni);
+      preloadedIndex = ni;
+    } catch(e) {}
   }
 
   async function advance() {
@@ -1054,18 +1202,28 @@
   }
 
   async function startSlideshow() {
-    ssDb = await openDB();
-    photoIds = await dbGetAllKeys(ssDb);
-    if (!photoIds.length) return;
+    try {
+      ssDb = await openDB();
+      photoIds = await dbGetKeys(ssDb);
+    } catch(e) {
+      showToast('Could not start slideshow: ' + e.message);
+      return;
+    }
+    if (!photoIds.length) {
+      showToast('No photos to show');
+      return;
+    }
 
+    // free thumbnail memory
     revokeThumbUrls();
     if (thumbObserver) thumbObserver.disconnect();
 
     buildOrder();
-    currentIndex = 0; kbVariant = 0;
+    currentIndex = 0;
+    kbVariant = 0;
 
-    el.slideA.classList.remove('visible','ken-burns','kb-a','kb-b','kb-c');
-    el.slideB.classList.remove('visible','ken-burns','kb-a','kb-b','kb-c');
+    el.slideA.classList.remove('visible', 'ken-burns', 'kb-a', 'kb-b', 'kb-c');
+    el.slideB.classList.remove('visible', 'ken-burns', 'kb-a', 'kb-b', 'kb-c');
     el.slideA.style.backgroundImage = '';
     el.slideB.style.backgroundImage = '';
 
@@ -1073,17 +1231,25 @@
     el.slideshow.classList.add('active');
     playing = true;
 
-    document.documentElement.style.setProperty('--transition-speed', Math.min(interval * 0.3, 2) + 's');
+    document.documentElement.style.setProperty(
+      '--transition-speed',
+      Math.min(interval * 0.3, 2) + 's'
+    );
+
     await showPhoto();
-    timer = setInterval(() => advance(), interval * 1000);
+    timer = setInterval(function() { advance(); }, interval * 1000);
     flashControls();
   }
 
   function stopSlideshow() {
     playing = false;
-    clearInterval(timer); timer = null;
-    revokeUrl(currentBlobUrl); revokeUrl(preloadedBlobUrl);
-    currentBlobUrl = null; preloadedBlobUrl = null; preloadedIndex = -1;
+    clearInterval(timer);
+    timer = null;
+    revokeUrl(currentBlobUrl);
+    revokeUrl(preloadedBlobUrl);
+    currentBlobUrl = null;
+    preloadedBlobUrl = null;
+    preloadedIndex = -1;
     el.slideA.style.backgroundImage = '';
     el.slideB.style.backgroundImage = '';
     el.slideshow.classList.remove('active', 'show-controls');
@@ -1094,34 +1260,41 @@
   function flashControls() {
     el.slideshow.classList.add('show-controls');
     clearTimeout(controlsTimer);
-    controlsTimer = setTimeout(() => el.slideshow.classList.remove('show-controls'), 3500);
+    controlsTimer = setTimeout(function() {
+      el.slideshow.classList.remove('show-controls');
+    }, 3500);
   }
 
   el.startBtn.addEventListener('click', startSlideshow);
   el.exitBtn.addEventListener('click', stopSlideshow);
-  el.pauseBtn.addEventListener('click', () => {
+  el.pauseBtn.addEventListener('click', function() {
     if (playing) {
-      clearInterval(timer); timer = null; playing = false;
+      clearInterval(timer);
+      timer = null;
+      playing = false;
       el.pauseBtn.textContent = '▶ Play';
     } else {
       playing = true;
-      timer = setInterval(() => advance(), interval * 1000);
+      timer = setInterval(function() { advance(); }, interval * 1000);
       el.pauseBtn.textContent = '❚❚ Pause';
     }
     flashControls();
   });
-  el.slideshow.addEventListener('click', (e) => {
+  el.slideshow.addEventListener('click', function(e) {
     if (e.target.closest('#slideshow-controls')) return;
     flashControls();
   });
 
   // ── Init ──
-  (async () => {
+  (async function init() {
     try {
       const db = await openDB();
-      photoIds = await dbGetAllKeys(db);
+      photoIds = await dbGetKeys(db);
       buildThumbGrid();
-    } catch(e) { console.warn('DB init failed', e); }
+    } catch(e) {
+      console.warn('Init failed:', e.message);
+      showToast('Database error — try clearing site data and reloading');
+    }
   })();
 
 })();
